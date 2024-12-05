@@ -22,12 +22,12 @@
 
         $title = "LIkea";
 
-        echo "<a href='/home.php' id='title'> $title </a>";
+        echo "<a href='home.php' id='title'> <h1> <i> $title </i> </h1> </a>";
 
         ?>
     </div>
     <div id="main">
-        <a href="/furniture">Furniture</a>
+        <a href="furniture.php">Furniture</a>
     </div>
     <div id="user">
         <div id="name">
@@ -41,10 +41,10 @@
         <div id="manage">
             <?php
                     if (isset($_SESSION['id'])) {
-                        echo "<a href='/profile.php'> Manage Account</a>";
-                        echo "<a href='/logout.php'> Logout </a>";
+                        echo "<a href='profile.php'> Manage Account</a>";
+                        echo "<a href='logout.php'> Logout </a>";
                     } else {
-                        echo "<a href='/login.php'>Sign up/Login</a>";
+                        echo "<a href='login.php'>Sign up/Login</a>";
                     }
             ?>
         </div>

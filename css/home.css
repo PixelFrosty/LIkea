@@ -1,0 +1,45 @@
+#myBody {
+
+    & a {
+        color: white;
+        text-decoration: none;
+    }
+
+    & #cont {
+        display: flex;
+        justify-content: center;
+    }
+
+    & #button, #button1, #button2 {
+        width: 15em;
+        background: #359;
+        border-radius: 0.75em;
+        padding-block: 1.25em;
+        padding-inline: 1em;
+        transition: background 0.3s ease-in-out;
+        margin-bottom: 1em;
+
+        &:hover {
+            background: #248;
+        }
+    }
+     
+    & > * {
+        margin-top: 2em;
+        text-align: center;
+
+    }
+
+    & > #welcome {
+        margin-top: 2em ;
+        margin-bottom: 4em;
+    }
+
+    & h4 {
+        margin-block-start: 0 !important;
+        margin-top: 0;
+    }
+
+    & #buttons {
+    }
+}
