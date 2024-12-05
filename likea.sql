@@ -10,7 +10,6 @@ CREATE TABLE region(
 CREATE TABLE branch(
     branchID int AUTO_INCREMENT PRIMARY KEY,
     regionID int,
-    managerName varchar(50),
     branchPhoneNumber varchar(20),
     branchAddr varchar(60),
     FOREIGN KEY(regionID) REFERENCES region(regionID) ON DELETE CASCADE
