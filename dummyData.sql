@@ -121,3 +121,30 @@ INSERT INTO item (name, type, material, brand, year, price, sale, branchID) VALU
 ('Kleven', 'Appliances', 'Stone', 'Apple', 2023, 820.97, 0, 5),
 ('Leira', 'Appliances', 'Stone', 'Ikea', 2016, 275.58, 1, 2);
 
+INSERT INTO list (userID) VALUES
+(11),
+(22),
+(40),
+(29),
+(7),
+(6),
+(1),
+(21),
+(34),
+(46),
+(39),
+(13),
+(27),
+(42),
+(4),
+(33),
+(14),
+(23),
+(3),
+(5),
+(36),
+(44),
+(2);
+
+INSERT INTO inlist (listID, itemID, quantity) VALUES
+(1, )
