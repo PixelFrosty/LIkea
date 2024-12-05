@@ -1,0 +1,19 @@
+#item_list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Creates a responsive grid */
+    gap: 20px; /* Space between items */
+    padding: 20px;
+}
+
+#item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 15px;
+    background-color: #fff;
+
+    & h3, h4 {
+        margin-block-start: 0;
+        margin-block-end: 0.5em;
+    }
+}

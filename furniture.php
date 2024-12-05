@@ -1,7 +1,13 @@
 <?php
 session_start();
-$cssfile = "home.css";
+$cssfile = "browser.css";
 include 'header.php';
+
+$loggedIn = False;
+if (isset($_SESSION['id'])) {
+    $id = $_SESSION['id'];
+    $loggedIn = True;
+}
 
 $search = '';
 ?>
@@ -24,10 +30,46 @@ $get_type = $conn->query("SELECT DISTINCT type FROM item");
 $get_material = $conn->query("SELECT DISTINCT material FROM item");
 $get_brand = $conn->query("SELECT DISTINCT brand FROM item");
 $get_year = $conn->query("SELECT DISTINCT year FROM item");
-$items = $conn->query("SELECT * FROM item");
+$itemQuery = <<<'EOT'
+SELECT *
+FROM (
+    SELECT 
+        i.itemID,
+        i.name AS item_name, 
+        i.type AS item_type, 
+        i.material, 
+        i.brand, 
+        i.year, 
+        i.price AS originalPrice,
+        ROUND(i.price * i.sale, 2) AS salePrice,
+        r.location AS region
+    FROM 
+        item i
+    JOIN 
+        branch b ON i.branchID = b.branchID
+    JOIN 
+        region r ON b.regionID = r.regionID
+    JOIN 
+        user u ON u.regionID = r.regionID
+EOT;
+
+if ($loggedIn === True && isset($_POST['search'])) {
+    $itemQuery .= "WHERE";
+    if ($loggedIn === True) {
+        $itemQuery .= "u.userID = $id";
+    }
+    if (isset($search)) {
+        $itemQuery .= "AND i.name = $search";
+    }
+}
+
+$itemQuery .= ") AS furnitureAvailableInRegion;";
+
+$items = $conn->query($itemQuery);
 $count = $conn->query("SELECT COUNT(*) as items FROM item");
 
 if (isset($_POST['search'])) {
+    $search = $_POST['search'];
 }
 ?>
 
@@ -79,10 +121,20 @@ if (isset($_POST['search'])) {
 <?php
 $countRes = $count -> fetch_assoc();
 $itemCount = $countRes['items'];
-echo "Amount of items: $itemCount";
+echo "<div id='count'> Amount of items: $itemCount </div>";
 
+echo "<div id='item_list'>";
 while ($row = $items -> fetch_assoc()) {
-    echo "".$row['name']."<br>";
+    echo "<div id='item'>"
+."<h3>".$row['item_name']."</h3>"
+."<h4>".$row['brand']."</h4>"
+.$row['item_type']."<br>"
+.$row['material']."<br>"
+.$row['year']."<br>"
+.$row['originalPrice']."<br>"
+.$row['salePrice']."<br>"
+."</div>";
 }
+echo "</div>";
 ?>
 
