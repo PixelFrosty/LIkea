@@ -240,6 +240,11 @@ WHERE listID = <specified_ID>;
 
 
 DELETE FROM inlist
+--Remove all items from a list but preserve the list
+WHERE listID = <listID>;
+
+
+DELETE FROM inlist
 --Removes a specific item from a list
 WHERE listID = <listID> 
 AND itemID = <itemID>;
@@ -272,7 +277,29 @@ WHERE userID = <userID> AND itemID = <itemID>;
 -- Displays the number of items in a user's cart
 SELECT COUNT(*) FROM cart WHERE userID = <userID>;
 
+-- **************************************************************************
 
 
 
+-- *** FOR PROFILE PAGE ***********************************************************************
+
+UPDATE user
+SET name = <new name>
+WHERE userID = <userID>
+
+UPDATE user
+SET email = <new email>
+WHERE userID = <userID>
+
+UPDATE user
+SET phone = <new phone number>
+WHERE userID = <userID>
+
+UPDATE user
+SET password = <new password>
+WHERE userID = <userID>
+
+UPDATE user
+SET regionID = <new regionID>
+WHERE userID = <userID>
 
