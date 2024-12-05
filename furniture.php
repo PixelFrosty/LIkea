@@ -18,10 +18,17 @@ $mysql_password = "";
 $mysql_dbname = "likeadb";
 $conn = new mysqli($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname) or 
 die("Connection failed: %s\n". $conn -> error);
+
+// to find all existing filters
 $get_type = $conn->query("SELECT DISTINCT type FROM item");
 $get_material = $conn->query("SELECT DISTINCT material FROM item");
 $get_brand = $conn->query("SELECT DISTINCT brand FROM item");
 $get_year = $conn->query("SELECT DISTINCT year FROM item");
+$items = $conn->query("SELECT * FROM item");
+$count = $conn->query("SELECT COUNT(*) as items FROM item");
+
+if (isset($_POST['search'])) {
+}
 ?>
 
 <form method="POST" action="">
@@ -66,4 +73,16 @@ $get_year = $conn->query("SELECT DISTINCT year FROM item");
             }
         ?>
     </select>
+<input type="submit" value="Apply filters" name="apply_filter" id="button">
 </form>
+
+<?php
+$countRes = $count -> fetch_assoc();
+$itemCount = $countRes['items'];
+echo "Amount of items: $itemCount";
+
+while ($row = $items -> fetch_assoc()) {
+    echo "".$row['name']."<br>";
+}
+?>
+
