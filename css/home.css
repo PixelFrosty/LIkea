@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+}
+
+#navbar {
+    padding: 1em;
+    background: #ddd;
+    display: flex;
+    & * {
+        margin-inline: 1em;
+    }
+}
+
+#user {
+    margin-left: auto;
+    margin-right: 0;
+}
