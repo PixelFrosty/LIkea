@@ -3,18 +3,18 @@ CREATE DATABASE likeadb;
 USE likeadb;
 
 CREATE TABLE region(
-    ID int PRIMARY KEY,
+    regionID int PRIMARY KEY,
     location varchar(15) NOT NULL UNIQUE
 );
 
 CREATE TABLE branch(
-    ID int AUTO_INCREMENT PRIMARY KEY,
+    branchID int AUTO_INCREMENT PRIMARY KEY,
     regionID int,
-    FOREIGN KEY(regionID) REFERENCES region(ID) ON DELETE CASCADE
+    FOREIGN KEY(regionID) REFERENCES region(regionID) ON DELETE CASCADE
 );
 
 CREATE TABLE item(
-    ID int AUTO_INCREMENT PRIMARY KEY,
+    itemID int AUTO_INCREMENT PRIMARY KEY,
     name varchar(25) NOT NULL,
     type varchar(30) NOT NULL,
     material varchar(30) NOT NULL,
@@ -23,18 +23,18 @@ CREATE TABLE item(
     price float NOT NULL,
     sale int DEFAULT 0,
     branchID int NOT NULL,
-    FOREIGN KEY(branchID) REFERENCES branch(ID) ON DELETE CASCADE
+    FOREIGN KEY(branchID) REFERENCES branch(branchID) ON DELETE CASCADE
 );
 
 CREATE TABLE user(
-    ID int AUTO_INCREMENT PRIMARY KEY,
+    userID int AUTO_INCREMENT PRIMARY KEY,
     name varchar(50) NOT NULL,
     email varchar(50) NOT NULL UNIQUE,
     phone varchar(20) UNIQUE,
     password varchar(60) NOT NULL UNIQUE,
     created timestamp DEFAULT CURRENT_TIMESTAMP,
     regionID int,
-    FOREIGN KEY(regionID) REFERENCES region(ID) ON DELETE SET NULL,
+    FOREIGN KEY(regionID) REFERENCES region(regionID) ON DELETE SET NULL,
     is_Admin TINYINT(1) NOT NULL DEFAULT 0
 );
 
@@ -44,15 +44,15 @@ CREATE TABLE cart(
     time timestamp DEFAULT CURRENT_TIMESTAMP,
     quantity int DEFAULT 0,
     PRIMARY KEY(userID, itemID),
-    FOREIGN KEY(userID) REFERENCES user(ID) ON DELETE CASCADE,
-    FOREIGN KEY(itemID) REFERENCES item(ID) ON DELETE CASCADE
+    FOREIGN KEY(userID) REFERENCES user(userID) ON DELETE CASCADE,
+    FOREIGN KEY(itemID) REFERENCES item(itemID) ON DELETE CASCADE
 );
 
 CREATE TABLE list(
     listID int AUTO_INCREMENT PRIMARY KEY,
     userID int,
     time timestamp DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(userID) REFERENCES user(ID) ON DELETE CASCADE
+    FOREIGN KEY(userID) REFERENCES user(userID) ON DELETE CASCADE
 );
 
 CREATE TABLE inlist(
@@ -61,6 +61,6 @@ CREATE TABLE inlist(
     time timestamp DEFAULT CURRENT_TIMESTAMP,
     quantity int DEFAULT 0,
     PRIMARY KEY(listID, itemID),
-    FOREIGN KEY(listID) REFERENCES list(ID) ON DELETE CASCADE,
-    FOREIGN KEY(itemID) REFERENCES item(ID) ON DELETE CASCADE
+    FOREIGN KEY(listID) REFERENCES list(listID) ON DELETE CASCADE,
+    FOREIGN KEY(itemID) REFERENCES item(itemID) ON DELETE CASCADE
 );
