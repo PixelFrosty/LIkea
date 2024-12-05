@@ -146,9 +146,10 @@ SELECT * FROM
         year = <year>) AS furnitureListings;
 
 
-SELECT * FROM
-(    SELECT 
--- Select based on if it is on sale or not
+SELECT * 
+FROM (
+    SELECT 
+        -- Select based on if it is on sale or not
         itemID, 
         name AS item_name, 
         type AS item_type, 
@@ -159,8 +160,10 @@ SELECT * FROM
         ROUND(price * sale, 2) AS salePrice,
         branchID
     FROM item
-    WHERE
-        sale < 1) AS furnitureListings;
+    WHERE sale < 1
+) AS furnitureListings
+ORDER BY salePrice ASC;
+
 
 SELECT * FROM
     (SELECT 
