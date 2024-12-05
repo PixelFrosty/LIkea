@@ -124,15 +124,18 @@ INSERT INTO item (name, type, material, brand, year, price, sale, branchID) VALU
 ('Kleven', 'Appliances', 'Stone', 'Apple', 2023, 820.97, 0, 5),
 ('Leira', 'Appliances', 'Stone', 'Ikea', 2016, 275.58, 1, 2);
 
-INSERT INTO list (userID) VALUES
+
+INSERT INTO list (userID, listName) VALUES
 -- listID = 1-23
-(11),
-(22),
-(40),
-(29),
-(7),
-(6),
-(1),
+(11, "Wishlist"),
+(22, "Birthday list"),
+(40, "Horrible products list"),
+(29, "Kindling list"),
+(7, "list 12"),
+(6, "new list"),
+(1, "christmas presents");
+
+INSERT INTO list (userID) VALUES
 (21),
 (34),
 (46),
