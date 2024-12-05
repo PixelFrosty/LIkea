@@ -1,6 +1,10 @@
+CREATE DATABASE likeadb;
+
+USE likeadb;
+
 CREATE TABLE region(
-    ID int AUTO_INCREMENT PRIMARY KEY,
-    location varchar(56) NOT NULL UNIQUE
+    ID int PRIMARY KEY,
+    location varchar(15) NOT NULL UNIQUE
 );
 
 CREATE TABLE branch(
@@ -11,7 +15,7 @@ CREATE TABLE branch(
 
 CREATE TABLE item(
     ID int AUTO_INCREMENT PRIMARY KEY,
-    color varchar(15) NOT NULL,
+    name varchar(25) NOT NULL,
     type varchar(30) NOT NULL,
     material varchar(30) NOT NULL,
     brand varchar(50) NOT NULL,
@@ -30,7 +34,8 @@ CREATE TABLE user(
     password varchar(60) NOT NULL UNIQUE,
     created timestamp DEFAULT CURRENT_TIMESTAMP,
     regionID int,
-    FOREIGN KEY(regionID) REFERENCES region(ID) ON DELETE SET NULL
+    FOREIGN KEY(regionID) REFERENCES region(ID) ON DELETE SET NULL,
+    is_Admin TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE cart(
@@ -44,7 +49,7 @@ CREATE TABLE cart(
 );
 
 CREATE TABLE list(
-    ID int AUTO_INCREMENT PRIMARY KEY,
+    listID int AUTO_INCREMENT PRIMARY KEY,
     userID int,
     time timestamp DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(userID) REFERENCES user(ID) ON DELETE CASCADE
