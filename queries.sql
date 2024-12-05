@@ -189,6 +189,13 @@ VALUES (<USER_ID>, <ITEM_ID>, <QUANTITY>)
 ON DUPLICATE KEY UPDATE 
     quantity = quantity + <QUANTITY>;
 
+
+SELECT listName
+--Displays the names of all lists a user has
+FROM list
+WHERE userID = <userID>;
+
+
 -- %%%%%%%%%% ADDING TO A LIST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 INSERT INTO list (userID)
 -- Step 1: check to see if a list with the chosen ID already exists
@@ -207,7 +214,6 @@ VALUES (<LIST_ID>, <ITEM_ID>, <QUANTITY>)
 ON DUPLICATE KEY UPDATE 
     quantity = quantity + <QUANTITY>;
 -- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 -- **** FOR LISTS PAGE **********************************************************************
 
@@ -237,6 +243,11 @@ SELECT * FROM
 DELETE FROM list
 --Deleting a list
 WHERE listID = <specified_ID>;
+
+
+DELETE FROM inlist
+--Remove all items from a list but preserve the list
+WHERE listID = <listID>;
 
 
 DELETE FROM inlist
@@ -272,7 +283,47 @@ WHERE userID = <userID> AND itemID = <itemID>;
 -- Displays the number of items in a user's cart
 SELECT COUNT(*) FROM cart WHERE userID = <userID>;
 
+-- **************************************************************************
 
+-- *** FOR PROFILE PAGE ***********************************************************************
 
+UPDATE user
+SET name = <new name>
+WHERE userID = <userID>
 
+UPDATE user
+SET email = <new email>
+WHERE userID = <userID>
 
+UPDATE user
+SET phone = <new phone number>
+WHERE userID = <userID>
+
+UPDATE user
+SET password = <new password>
+WHERE userID = <userID>
+
+UPDATE user
+SET regionID = <new regionID>
+WHERE userID = <userID>
+
+-- **************************************************************************
+
+-- **** FOR BRANCH INFO PAGE **********************************************************************
+
+SELECT 
+-- Get branch info based on user region
+    b.managerName AS Manager_Name,
+    b.branchPhoneNumber AS Branch_Phone_Number,
+    b.branchAddr AS Branch_Address
+    r.location AS Location
+FROM 
+    branch b
+JOIN 
+    region r ON b.regionID = r.regionID
+JOIN
+    user u ON u.regionID = r.regionID
+WHERE
+    u.userID = <userID>;
+
+    

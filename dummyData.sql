@@ -61,12 +61,12 @@ INSERT INTO user (name, email, phone, password, regionID) VALUES
 ('Lucia Fernandez', 'luciafernandez@email.com', '(313) 555-2647', 'Wm7#Kl4p', 4),
 ('Vijay Reddy', 'vijayreddy@email.com', '(781) 555-5902', 'Ln2$Zt5x', 5);
 
-INSERT INTO branch(regionID) VALUES
-(1),
-(2),
-(3),
-(4),
-(5);
+INSERT INTO branch(regionID, branchPhoneNumber, branchAddr) VALUES
+(1, '(944) 265-6442', '1234 Palm Drive, Los Angeles, CA 90001'),
+(2, '(127) 302-5127', '5678 Oak Street, Chicago, IL 60604'),
+(3, '(138) 635-1150', '7890 Sun Valley Road, Phoenix, AZ 85001'),
+(4, '(784) 122-1036', '4321 Beachside Blvd, Miami, FL 33101'),
+(5, '(788) 785-2839', '1010 Broadway Avenue, New York, NY 10001');
 
 INSERT INTO item (name, type, material, brand, year, price, sale, branchID) VALUES
 ('Haugland', 'Appliances', 'Leather', 'Samsung', 2022, 115.84, 1, 3),
