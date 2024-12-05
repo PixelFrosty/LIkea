@@ -47,22 +47,25 @@ if (isset($_POST['login_request'])) {
 <div id="container">
     <div id="login">
 
-        <h1 id="notice">Likea</h1>
+        <h4 id="notice">Login</h4>
 
         <form method="POST" action="">
-            <input type="text" id="email" name="email" placeholder="Email" required value="<?php echo htmlspecialchars($email); ?>"> <br> <br>
-            <input type="password" id="password" name="password" placeholder="Password" required> <br> <br>
+            <input type="text" id="email" name="email" placeholder="Email" required value="<?php echo htmlspecialchars($email); ?>">
+            <br>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <br>
             <input type="submit" value="Login" name="login_request" id="button">
         </form>
-        <br>
-        Don't have an account?
-        <a href="signup.php">Signup</a>
 
         <?php
         if (isset($error)) {
-            echo "<br> <br>";
-            echo "<p style='color:red;'>$error</p>";
+            echo "<p style='color:red;' id='error'>$error</p>";
         }
         ?>
+
+        <div id="suggestion">
+            Don't have an account?
+            <a href="signup.php">Signup</a>
+        </div>
     </div>
 </div>

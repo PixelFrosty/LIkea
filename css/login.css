@@ -5,11 +5,62 @@
     height: 80vh;
 }
 
+#notice {
+    margin-top: 0;
+}
+
 #login {
     text-align: center;
     background: #ddd;
     width: 20em;
-    height: 25em;
+    height: auto;
     padding: 2em;
     border-radius: 2em;
+
+    & *:not(#notice):not(form):not(#suggestion):not(#button) {
+        margin-bottom: 1em;
+    }
+
+    & #suggestion {
+        width: 20em;
+        position: fixed;
+        transform: translateY(3em);
+    }
+}
+
+#error {
+    margin-block-end: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+input:not(#button) {
+    background: #ddd;
+    width: 18em;
+    height: 2.5em;
+    border-radius: 2em;
+    border: 0.1em solid #000;
+    padding-inline: 1em;
+}
+
+select {
+    background: #ddd;
+    width: 18em;
+    height: 2.5em;
+    border-radius: 2em;
+    border: 0.1em solid #000;
+    padding-inline: 1em;
+}
+
+#button {
+    color: #fff;
+    background: #359;
+    width: 10em;
+    height: 3.5em;
+    border-radius: 2em;
+    border-style: none;
+    transition: background 0.3s ease-in-out, filter 0.3s ease-in-out;
+    
+    &:hover {
+        background: #248;
+    }
 }
