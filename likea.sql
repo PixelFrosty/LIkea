@@ -50,6 +50,7 @@ CREATE TABLE cart(
 
 CREATE TABLE list(
     listID int AUTO_INCREMENT PRIMARY KEY,
+    listName varchar(25) DEFAULT "New List",
     userID int,
     time timestamp DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(userID) REFERENCES user(userID) ON DELETE CASCADE
