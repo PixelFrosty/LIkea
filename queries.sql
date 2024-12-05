@@ -1,3 +1,5 @@
+-- ***************FOR FURNITURE PAGE**********************************************************
+
 SELECT 
 -- Query to see if an item is available in a user's region
     i.itemID, 
@@ -6,8 +8,8 @@ SELECT
     i.material, 
     i.brand, 
     i.year, 
-    i.price, 
-    i.sale, 
+    i.price AS originalPrice,
+    ROUND(i.price * i.sale, 2) AS salePrice,
     r.location AS region
 FROM 
     item i
@@ -39,25 +41,118 @@ WHERE
     i.itemID = <ITEM_ID>;
 
 
-INSERT INTO cart (userID, itemID, quantity)
+    SELECT 
+-- Select based on name
+    itemID, 
+    name AS item_name, 
+    type AS item_type, 
+    material, 
+    brand, 
+    year, 
+    price AS originalPrice,
+    ROUND(price * sale, 2) AS salePrice,
+    branchID
+FROM item
+WHERE
+    name = <name>;
+
+
+SELECT 
+-- Select based on ID
+    itemID, 
+    name AS item_name, 
+    type AS item_type, 
+    material, 
+    brand, 
+    year, 
+    price AS originalPrice,
+    ROUND(price * sale, 2) AS salePrice,
+    branchID
+FROM item
+WHERE
+    itemID = <itemID>;
+
+
+SELECT 
+-- Select based on type
+    itemID, 
+    name AS item_name, 
+    type AS item_type, 
+    material, 
+    brand, 
+    year, 
+    price AS originalPrice,
+    ROUND(price * sale, 2) AS salePrice,
+    branchID
+FROM item
+WHERE
+    type = <type>;
+
+
+SELECT 
+-- Select based on  material
+    itemID, 
+    name AS item_name, 
+    type AS item_type, 
+    material, 
+    brand, 
+    year, 
+    price AS originalPrice,
+    ROUND(price * sale, 2) AS salePrice,
+    branchID
+FROM item
+WHERE
+    material = <material>;
+
+
+    SELECT 
+-- Select based on  material
+    itemID, 
+    name AS item_name, 
+    type AS item_type, 
+    material, 
+    brand, 
+    year, 
+    price AS originalPrice,
+    ROUND(price * sale, 2) AS salePrice,
+    branchID
+FROM item
+WHERE
+    brand = <brand>;
+
+
+    SELECT 
+-- Select based on  material
+    itemID, 
+    name AS item_name, 
+    type AS item_type, 
+    material, 
+    brand, 
+    year, 
+    price AS originalPrice,
+    ROUND(price * sale, 2) AS salePrice,
+    branchID
+FROM item
+WHERE
+    year = <year>;
+
+
+SELECT 
+    name AS itemName,
+    price AS originalPrice,
+    ROUND(price * sale, 2) AS salePrice
+FROM 
+    item
+    ORDER BY salePrice ASC;
+
+
+    INSERT INTO cart (userID, itemID, quantity)
 -- User adds something to their cart
 VALUES (<USER_ID>, <ITEM_ID>, <QUANTITY>)
 ON DUPLICATE KEY UPDATE 
     quantity = quantity + <QUANTITY>;
 
-INSERT INTO list (userID, itemID, quantity)
--- User adds something to their cart
-VALUES (<USER_ID>, <ITEM_ID>, <QUANTITY>)
-ON DUPLICATE KEY UPDATE 
-    quantity = quantity + <QUANTITY>;
-
-
-INSERT INTO list (listName, userID)
--- Creates a new list with a user-defined name
-VALUES (<LIST_NAME>, <USER_ID>);
-
-
--- ADDING TO A LIST ********************************************************************
+-- %%%%%%%%%% ADDING TO A LIST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 INSERT INTO list (userID)
 -- Step 1: check to see if a list with the chosen ID already exists
 VALUES (<USER_ID>)
@@ -74,7 +169,21 @@ INSERT INTO inlist (listID, itemID, quantity)
 VALUES (<LIST_ID>, <ITEM_ID>, <QUANTITY>)
 ON DUPLICATE KEY UPDATE 
     quantity = quantity + <QUANTITY>;
--- **************************************************************************************
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-- **************************************************************************
+
+
+
+
+
+
+
+
+-- **** FOR LISTS PAGE **********************************************************************
+
+INSERT INTO list (listName, userID)
+-- Creates a new list with a user-defined name
+VALUES (<LIST_NAME>, <USER_ID>);
 
 
 SELECT 
@@ -103,5 +212,11 @@ DELETE FROM inlist
 --Removes a specific item from a list
 WHERE listID = <listID> 
 AND itemID = <itemID>;
+-- **************************************************************************
+
+
+DELETE FROM cart 
+WHERE itemID = <itemID>;
+
 
 

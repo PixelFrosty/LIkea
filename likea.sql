@@ -21,7 +21,7 @@ CREATE TABLE item(
     brand varchar(50) NOT NULL,
     year int DEFAULT 2024,
     price float NOT NULL,
-    sale int DEFAULT 0,
+    sale float DEFAULT 1,
     branchID int NOT NULL,
     FOREIGN KEY(branchID) REFERENCES branch(branchID) ON DELETE CASCADE
 );
