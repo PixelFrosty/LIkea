@@ -1,152 +1,178 @@
 -- ***************FOR FURNITURE PAGE**********************************************************
 
-SELECT 
--- Query to see if an item is available in a user's region
-    i.itemID, 
-    i.name AS item_name, 
-    i.type AS item_type, 
-    i.material, 
-    i.brand, 
-    i.year, 
-    i.price AS originalPrice,
-    ROUND(i.price * i.sale, 2) AS salePrice,
-    r.location AS region
-FROM 
-    item i
-JOIN 
-    branch b ON i.branchID = b.branchID
-JOIN 
-    region r ON b.regionID = r.regionID
-JOIN 
-    user u ON u.regionID = r.regionID
-WHERE 
-    u.userID = <userID>
-    AND i.itemID = <itemID>;
-
-
-SELECT 
--- Informs a user where an item is available
-    i.itemID, 
-    i.name AS item_name, 
-    i.type AS item_type, 
-    r.location AS region, 
-    b.branchID AS branch
-FROM 
-    item i
-JOIN 
-    branch b ON i.branchID = b.branchID
-JOIN 
-    region r ON b.regionID = r.regionID
-WHERE 
-    i.itemID = <ITEM_ID>;
-
-
+SELECT *
+-- Finding furniture in a user's region
+FROM (
     SELECT 
--- Select based on name
-    itemID, 
-    name AS item_name, 
-    type AS item_type, 
-    material, 
-    brand, 
-    year, 
-    price AS originalPrice,
-    ROUND(price * sale, 2) AS salePrice,
-    branchID
-FROM item
-WHERE
-    name = <name>;
+        i.itemID, 
+        i.name AS item_name, 
+        i.type AS item_type, 
+        i.material, 
+        i.brand, 
+        i.year, 
+        i.price AS originalPrice,
+        ROUND(i.price * i.sale, 2) AS salePrice,
+        r.location AS region
+    FROM 
+        item i
+    JOIN 
+        branch b ON i.branchID = b.branchID
+    JOIN 
+        region r ON b.regionID = r.regionID
+    JOIN 
+        user u ON u.regionID = r.regionID
+    WHERE 
+        u.userID = <userID>
+        AND i.itemID = <itemID>
+) AS furnitureAvailableInRegion;
 
+SELECT * FROM (SELECT * FROM item) AS furnitureListings;
 
-SELECT 
+SELECT * FROM
+(    SELECT 
+    -- Informs a user where an item is available
+        i.itemID, 
+        i.name AS item_name, 
+        i.type AS item_type, 
+        r.location AS region, 
+        b.branchID AS branch
+    FROM 
+        item i
+    JOIN 
+        branch b ON i.branchID = b.branchID
+    JOIN 
+        region r ON b.regionID = r.regionID
+    WHERE 
+        i.itemID = <ITEM_ID>) AS itemsInARegion;
+
+SELECT * FROM
+(    SELECT 
 -- Select based on ID
-    itemID, 
-    name AS item_name, 
-    type AS item_type, 
-    material, 
-    brand, 
-    year, 
-    price AS originalPrice,
-    ROUND(price * sale, 2) AS salePrice,
-    branchID
-FROM item
-WHERE
-    itemID = <itemID>;
+        itemID, 
+        name AS item_name, 
+        type AS item_type, 
+        material, 
+        brand, 
+        year, 
+        price AS originalPrice,
+        ROUND(price * sale, 2) AS salePrice,
+        branchID
+    FROM item
+    WHERE
+        itemID = <itemID>) AS furnitureListings;
+
+SELECT * FROM
+(    SELECT 
+-- Select based on name
+        itemID, 
+        name AS item_name, 
+        type AS item_type, 
+        material, 
+        brand, 
+        year, 
+        price AS originalPrice,
+        ROUND(price * sale, 2) AS salePrice,
+        branchID
+    FROM item
+    WHERE
+        name = <name>) AS furnitureListings;
 
 
-SELECT 
+SELECT * FROM
+(    SELECT 
 -- Select based on type
-    itemID, 
-    name AS item_name, 
-    type AS item_type, 
-    material, 
-    brand, 
-    year, 
-    price AS originalPrice,
-    ROUND(price * sale, 2) AS salePrice,
-    branchID
-FROM item
-WHERE
-    type = <type>;
+        itemID, 
+        name AS item_name, 
+        type AS item_type, 
+        material, 
+        brand, 
+        year, 
+        price AS originalPrice,
+        ROUND(price * sale, 2) AS salePrice,
+        branchID
+    FROM item
+    WHERE
+        type = <type>) AS furnitureListings;
 
 
-SELECT 
--- Select based on  material
-    itemID, 
-    name AS item_name, 
-    type AS item_type, 
-    material, 
-    brand, 
-    year, 
-    price AS originalPrice,
-    ROUND(price * sale, 2) AS salePrice,
-    branchID
-FROM item
-WHERE
-    material = <material>;
+SELECT * FROM
+(    SELECT 
+-- Select based on material
+        itemID, 
+        name AS item_name, 
+        type AS item_type, 
+        material, 
+        brand, 
+        year, 
+        price AS originalPrice,
+        ROUND(price * sale, 2) AS salePrice,
+        branchID
+    FROM item
+    WHERE
+        material = <material>) AS furnitureListings;
 
 
-    SELECT 
--- Select based on  material
-    itemID, 
-    name AS item_name, 
-    type AS item_type, 
-    material, 
-    brand, 
-    year, 
-    price AS originalPrice,
-    ROUND(price * sale, 2) AS salePrice,
-    branchID
-FROM item
-WHERE
-    brand = <brand>;
+SELECT * FROM
+(    SELECT 
+-- Select based on brand
+        itemID, 
+        name AS item_name, 
+        type AS item_type, 
+        material, 
+        brand, 
+        year, 
+        price AS originalPrice,
+        ROUND(price * sale, 2) AS salePrice,
+        branchID
+    FROM item
+    WHERE
+        brand = <brand>) AS furnitureListings;
 
 
-    SELECT 
--- Select based on  material
-    itemID, 
-    name AS item_name, 
-    type AS item_type, 
-    material, 
-    brand, 
-    year, 
-    price AS originalPrice,
-    ROUND(price * sale, 2) AS salePrice,
-    branchID
-FROM item
-WHERE
-    year = <year>;
+SELECT * FROM
+(    SELECT 
+-- Select based on year
+        itemID, 
+        name AS item_name, 
+        type AS item_type, 
+        material, 
+        brand, 
+        year, 
+        price AS originalPrice,
+        ROUND(price * sale, 2) AS salePrice,
+        branchID
+    FROM item
+    WHERE
+        year = <year>) AS furnitureListings;
 
 
-SELECT 
-    name AS itemName,
-    price AS originalPrice,
-    ROUND(price * sale, 2) AS salePrice
-FROM 
-    item
-    ORDER BY salePrice ASC;
+SELECT * FROM
+(    SELECT 
+-- Select based on if it is on sale or not
+        itemID, 
+        name AS item_name, 
+        type AS item_type, 
+        material, 
+        brand, 
+        year, 
+        price AS originalPrice,
+        ROUND(price * sale, 2) AS salePrice,
+        branchID
+    FROM item
+    WHERE
+        sale < 1) AS furnitureListings;
+
+SELECT * FROM
+    (SELECT 
+        name AS itemName,
+        price AS originalPrice,
+        ROUND(price * sale, 2) AS salePrice
+    FROM 
+        item
+        ORDER BY salePrice ASC) AS pricesTable;
 
 
-    INSERT INTO cart (userID, itemID, quantity)
+INSERT INTO cart (userID, itemID, quantity)
 -- User adds something to their cart
 VALUES (<USER_ID>, <ITEM_ID>, <QUANTITY>)
 ON DUPLICATE KEY UPDATE 
@@ -186,21 +212,22 @@ INSERT INTO list (listName, userID)
 VALUES (<LIST_NAME>, <USER_ID>);
 
 
-SELECT 
--- View all items in a particular list
-    i.name AS ItemName,
-    il.Quantity,
-    l.time AS TimeCreated
-FROM 
-    list l
-JOIN 
-    inlist il ON l.listID = il.listID
-JOIN 
-    item i ON il.itemID = i.itemID
-WHERE 
-    l.listID = <listID> 
-    AND l.userID = <userID>
-    AND l.listName = <listName>;
+SELECT * FROM
+    (SELECT 
+    -- View all items in a particular list
+        i.name AS ItemName,
+        il.Quantity,
+        l.time AS TimeCreated
+    FROM 
+        list l
+    JOIN 
+        inlist il ON l.listID = il.listID
+    JOIN 
+        item i ON il.itemID = i.itemID
+    WHERE 
+        l.listID = <listID> 
+        AND l.userID = <userID>
+        AND l.listName = <listName>) AS listContents;
 
 
 DELETE FROM list
