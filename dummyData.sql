@@ -78,7 +78,7 @@ INSERT INTO item (name, type, material, brand, year, price, sale, branchID) VALU
 ('Bjornhaug', 'Furniture', 'Cotton', 'LG', 2015, 683.92, 0, 1),
 ('Hjemli', 'Appliances', 'Wood', 'Siemens', 2022, 264.73, 0, 2),
 ('Hoglund', 'Furniture', 'Metal', 'Bosch', 2021, 242.09, 1, 3),
-('Kråkenes', 'Furniture', 'Plastic', 'Apple', 2023, 414.85, 0, 2),
+('Krakenes', 'Furniture', 'Plastic', 'Apple', 2023, 414.85, 0, 2),
 ('Holmstad', 'Furniture', 'Wood', 'Ikea', 2019, 302.64, 0, 3),
 ('Bergdahl', 'Electronics', 'Cotton', 'Philips', 2020, 517.55, 0, 5),
 ('Aasland', 'Furniture', 'Cotton', 'Bosch', 2017, 953.15, 0, 4),
