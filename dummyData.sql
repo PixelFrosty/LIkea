@@ -1,4 +1,4 @@
-INSERT INTO region (ID, location) VALUES
+INSERT INTO region (regionID, location) VALUES
 (1, 'WEST'),
 (2, 'MIDWEST'),
 (3, 'SOUTHWEST'),
