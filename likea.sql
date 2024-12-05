@@ -3,8 +3,8 @@ CREATE DATABASE likeadb;
 USE likeadb;
 
 CREATE TABLE region(
-    ID int AUTO_INCREMENT PRIMARY KEY,
-    location varchar(56) NOT NULL UNIQUE
+    ID int PRIMARY KEY,
+    location varchar(15) NOT NULL UNIQUE
 );
 
 CREATE TABLE branch(
