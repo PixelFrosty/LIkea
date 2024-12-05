@@ -308,11 +308,18 @@ WHERE userID = <userID>
 -- **** FOR BRANCH INFO PAGE **********************************************************************
 
 SELECT 
-    b.managername AS Manager_Name,
+-- Get branch info based on user region
+    b.managerName AS Manager_Name,
     b.branchPhoneNumber AS Branch_Phone_Number,
-    r.location AS location
+    b.branchAddr AS Branch_Address
+    r.location AS Location
 FROM 
     branch b
 JOIN 
-    region r ON b.regionID = r.regionID;
+    region r ON b.regionID = r.regionID
+JOIN
+    user u ON u.regionID = r.regionID
+WHERE
+    u.userID = <userID>;
+
     
