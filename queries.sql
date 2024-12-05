@@ -303,3 +303,16 @@ UPDATE user
 SET regionID = <new regionID>
 WHERE userID = <userID>
 
+-- **************************************************************************
+
+-- **** FOR BRANCH INFO PAGE **********************************************************************
+
+SELECT 
+    b.managername AS Manager_Name,
+    b.branchPhoneNumber AS Branch_Phone_Number,
+    r.location AS location
+FROM 
+    branch b
+JOIN 
+    region r ON b.regionID = r.regionID;
+    
