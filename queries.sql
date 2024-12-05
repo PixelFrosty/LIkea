@@ -1,5 +1,9 @@
 -- ***************FOR FURNITURE PAGE**********************************************************
 
+-- For displaying a total number of items in the store
+SELECT COUNT(*) FROM item;
+
+
 SELECT *
 -- Finding furniture in a user's region
 FROM (
@@ -27,6 +31,10 @@ FROM (
 ) AS furnitureAvailableInRegion;
 
 SELECT * FROM (SELECT * FROM item) AS furnitureListings;
+
+-- Display a count of results from a query
+SELECT COUNT(*) FROM furnitureListings;
+
 
 SELECT * FROM
 (    SELECT 
@@ -199,13 +207,6 @@ VALUES (<LIST_ID>, <ITEM_ID>, <QUANTITY>)
 ON DUPLICATE KEY UPDATE 
     quantity = quantity + <QUANTITY>;
 -- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
--- **************************************************************************
-
-
-
-
-
-
 
 
 -- **** FOR LISTS PAGE **********************************************************************
@@ -242,11 +243,36 @@ DELETE FROM inlist
 --Removes a specific item from a list
 WHERE listID = <listID> 
 AND itemID = <itemID>;
+
+--Displays a count of items in a user's list
+SELECT COUNT(*) 
+FROM inlist i
+JOIN list l ON i.listID = l.listID
+WHERE l.userID = <userID>;
+
 -- **************************************************************************
 
+-- **** FOR CART PAGE **********************************************************************
 
 DELETE FROM cart 
+-- Delete a specific item from the cart
 WHERE itemID = <itemID>;
+
+
+DELETE FROM cart
+-- Clear the cart
+WHERE userID = <userID>;
+
+
+UPDATE cart
+-- Update the quantity of an item in a cart
+SET quantity = <newQuantity>
+WHERE userID = <userID> AND itemID = <itemID>;
+
+-- Displays the number of items in a user's cart
+SELECT COUNT(*) FROM cart WHERE userID = <userID>;
+
+
 
 
 
