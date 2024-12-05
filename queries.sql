@@ -97,3 +97,11 @@ WHERE
 DELETE FROM list
 --Deleting a list
 WHERE listID = <specified_ID>;
+
+
+DELETE FROM inlist
+--Removes a specific item from a list
+WHERE listID = <listID> 
+AND itemID = <itemID>;
+
+
