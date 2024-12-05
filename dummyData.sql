@@ -5,8 +5,11 @@ INSERT INTO region (ID, location) VALUES
 (4, 'SOUTHEAST'),
 (5, 'NORTHEAST');
 
+INSERT INTO user (name, email, phone, password, regionID, is_Admin) VALUES
+('TESTUSER', 'testuser@email.com', '(123) 456-7890', '12345678', 2, 1),
+('ROOT_USER', 'rootuser@email.com', '(111) 222-3333', '11111111', 1, 1);
+
 INSERT INTO user (name, email, phone, password, regionID) VALUES
-('TESTUSER', 'testuser@email.com', '(123) 456-7890', '12345678', 2),
 ('Aisha Ahmed', 'aishaahmed@email.com', '(202) 555-0137', 'Xy7@qP3z', 1),
 ('Mei Tanaka', 'meitanaka@email.com', '(415) 555-0298', 'Rd!9Fg2x', 3),
 ('Priya Kapoor', 'priyakapoor@email.com', '(310) 555-7845', 'Pa$4Kl7w', 2),

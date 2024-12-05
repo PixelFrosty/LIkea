@@ -34,7 +34,8 @@ CREATE TABLE user(
     password varchar(60) NOT NULL UNIQUE,
     created timestamp DEFAULT CURRENT_TIMESTAMP,
     regionID int,
-    FOREIGN KEY(regionID) REFERENCES region(ID) ON DELETE SET NULL
+    FOREIGN KEY(regionID) REFERENCES region(ID) ON DELETE SET NULL,
+    is_Admin TINYINT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE cart(
