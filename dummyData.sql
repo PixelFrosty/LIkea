@@ -50,3 +50,6 @@ INSERT INTO user (name, email, phone, password, role_id) VALUES
 ('Jamal Carter', 'jamalcarter@email.com', '(559) 555-7423', 'Tp1@Rq8z', 1),
 ('Lucia Fernandez', 'luciafernandez@email.com', '(313) 555-2647', 'Wm7#Kl4p', 4),
 ('Vijay Reddy', 'vijayreddy@email.com', '(781) 555-5902', 'Ln2$Zt5x', 5);
+
+
+

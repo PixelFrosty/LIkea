@@ -1,3 +1,7 @@
+CREATE DATABASE likeadb;
+
+USE likeadb;
+
 CREATE TABLE region(
     ID int AUTO_INCREMENT PRIMARY KEY,
     location varchar(56) NOT NULL UNIQUE
@@ -11,7 +15,7 @@ CREATE TABLE branch(
 
 CREATE TABLE item(
     ID int AUTO_INCREMENT PRIMARY KEY,
-    color varchar(15) NOT NULL,
+    name varchar(25) NOT NULL,
     type varchar(30) NOT NULL,
     material varchar(30) NOT NULL,
     brand varchar(50) NOT NULL,
