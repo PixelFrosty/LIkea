@@ -108,7 +108,7 @@ INSERT INTO item (name, type, material, brand, year, price, sale, branchID) VALU
 ('Hegdal', 'Furniture', 'Plastic', 'Philips', 2015, 410.96, 1, 2),
 ('Austheim', 'Appliances', 'Cotton', 'Ikea', 2018, 869.04, 0, 5),
 ('Huset', 'Clothing', 'Plastic', 'Sony', 2020, 762.89, 0, 4),
-('Trygstad', 'Appliances', 'Cotton', 'Ikea', 2019, 915.29, 1, 6),
+('Trygstad', 'Appliances', 'Cotton', 'Ikea', 2019, 915.29, 1, 5),
 ('Follestad', 'Electronics', 'Stone', 'Siemens', 2016, 775.11, 0, 2),
 ('Vestre', 'Clothing', 'Metal', 'Apple', 2020, 267.76, 0, 4),
 ('Flottum', 'Appliances', 'Plastic', 'LG', 2021, 647.79, 1, 5),
