@@ -189,6 +189,13 @@ VALUES (<USER_ID>, <ITEM_ID>, <QUANTITY>)
 ON DUPLICATE KEY UPDATE 
     quantity = quantity + <QUANTITY>;
 
+
+SELECT listName
+--Displays the names of all lists a user has
+FROM list
+WHERE userID = <userID>;
+
+
 -- %%%%%%%%%% ADDING TO A LIST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 INSERT INTO list (userID)
 -- Step 1: check to see if a list with the chosen ID already exists
@@ -207,7 +214,6 @@ VALUES (<LIST_ID>, <ITEM_ID>, <QUANTITY>)
 ON DUPLICATE KEY UPDATE 
     quantity = quantity + <QUANTITY>;
 -- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 -- **** FOR LISTS PAGE **********************************************************************
 
@@ -278,8 +284,6 @@ WHERE userID = <userID> AND itemID = <itemID>;
 SELECT COUNT(*) FROM cart WHERE userID = <userID>;
 
 -- **************************************************************************
-
-
 
 -- *** FOR PROFILE PAGE ***********************************************************************
 
