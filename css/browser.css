@@ -1,3 +1,46 @@
+#filter-form {
+    margin-left: 2em;
+    & > *:not(label) {
+        background: #bbb;
+        padding: 1em;
+        border-radius: 1em;
+        border-style: none;
+        margin-inline: 0.25em;
+    }
+
+    & > .apply {
+        margin-left: 5em;
+        background: #359;
+        color: white;
+        transition: background 0.3s ease-in-out;
+
+        &:hover {
+            background: #248;
+        }
+    }
+}
+
+#filter-form > label {
+    font-size: 0.84em;
+}
+
+#search-form {
+
+    & #search {
+    width: 94vw;
+    height: 3em;
+    margin-block: 1em;
+    margin-inline: 1em;
+    border-radius: 1em;
+    padding-inline: 1em;
+    border: 0.1em solid #bbb !important;
+    }
+    
+    & #button {
+        display: none;
+    }
+}
+
 #purchase {
     display: flex;
     justify-content: center;
