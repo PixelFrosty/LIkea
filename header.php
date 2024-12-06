@@ -42,6 +42,7 @@
             <?php
                     if (isset($_SESSION['id'])) {
                         echo "<a href='profile.php'> Manage Account</a>";
+                        echo "<a href='cart.php'> Manage Cart</a>";
                         echo "<a href='logout.php'> Logout </a>";
                     } else {
                         echo "<a href='login.php'>Sign up/Login</a>";

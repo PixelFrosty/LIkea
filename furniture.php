@@ -1,5 +1,6 @@
 <?php
 session_start();
+sleep(0.5);
 $cssfile = "browser.css";
 include 'header.php';
 
@@ -44,7 +45,7 @@ $itemQuery = <<<'EOT'
 SELECT *
 FROM (
     SELECT 
-        i.itemID,
+        i.itemID AS itemID,
         i.name AS item_name, 
         i.type AS item_type, 
         i.material, 
@@ -194,40 +195,42 @@ $itemCount = $countRes['items'];
         echo "Made from ".$row['material'];
         echo "<div id='price'>";
         if ($row['sale'] <= 0.99) {
-            echo "<b id='sale'>$".$row['salePrice']."</b><br><s>$".$row['originalPrice']."</s><br>";
+            echo "<span id='saleP'>".((1-$row['sale'])*100)."% Off!</span><br>";
+            echo "<b id='sale'>Now $".$row['salePrice']."</b><br><s>$".$row['originalPrice']."</s><br>";
         } else {
-            echo "<br><b>$".$row['originalPrice']."</b>";
+            echo "<br><br><b>$".$row['originalPrice']."</b>";
         }
-
         echo "</div>";
+
             if (isset($_SESSION['id'])) {
-                echo "<div id='purchase'>";
+                $quantity = 0;
+                $res = $conn->query("SELECT quantity FROM cart WHERE itemID = {$row['itemID']} and userID = {$_SESSION['id']}");
+                $quantityRes = $res->fetch_assoc();
+                if (isset($quantityRes)) { $quantity = $quantityRes['quantity']; }
+                if ($quantity > 0) { $cartText = "$quantity in cart.";}
+                else { $cartText = "Add to Cart";}
                 echo <<<EOT
-                <form action="" method="post">
-                    <button type="submit" name="cart" id="cart">Add to Cart</button>
-                </form>
-                <div>
-                <button type="button" name="list" id="list">Add to List</button>
+                <div id='purchase'>
+                    <form action="" method="post">
+                        <input type="hidden" name="itemID" id="itemID" value={$row['itemID']}>
+                        <button type="submit" name="cart" id="cart">$cartText</button>
+                    </form>
                 </div>
                 EOT;
-                echo "</div>";
             }
-        $lists = $conn->query("SELECT * FROM list WHERE userID = $id");
-        echo "<div id='listpop'>";
-        echo "<div id='col1'>";
-        echo "<select name='type' id='lists'>";
-        while ($row = $lists->fetch_assoc()) { echo "<option value='{$row['listName']}'>{$row['listName']}</option>"; }
-        echo "</select>";
-        echo "<button type='submit' name='listadd' id='listadd'>Add to List</button>";
-        echo "</div>";
-        echo "<button type='submit' name='listmake' id='listmake'>Make New List</button>";
-        echo "<div id='col1'>";
-        echo "</div>";
 
-        echo "</div>";
         echo "</div>";
     }
+
+    if (isset($_POST['cart'])) {
+        $cartQuery = <<<EOT
+        INSERT INTO cart (userID, itemID, quantity)
+        VALUES ({$_SESSION['id']}, {$_POST['itemID']}, 1)
+        ON DUPLICATE KEY UPDATE 
+            quantity = quantity + 1;
+        EOT;
+        $conn->query($cartQuery);
+    }
+    
     ?>
 </div>
-
-
