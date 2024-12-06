@@ -265,6 +265,19 @@ WHERE l.userID = <userID>;
 
 -- **** FOR CART PAGE **********************************************************************
 
+SELECT 
+-- View all items in a user's cart
+    i.name AS item_name, 
+    c.quantity AS item_quantity, 
+    ROUND(i.price * i.sale, 2) AS sale_price
+FROM 
+    cart c
+JOIN 
+    item i ON c.itemID = i.itemID
+WHERE 
+    c.userID = <userID>;
+
+
 DELETE FROM cart 
 -- Delete a specific item from the cart
 WHERE itemID = <itemID>;

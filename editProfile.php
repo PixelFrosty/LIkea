@@ -14,7 +14,6 @@ $mysql_username = "root";
 $mysql_password = "";
 $mysql_dbname = "likeadb";
 
-// Check database connection
 $conn = new mysqli($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -40,7 +39,7 @@ $result2 = $conn->query($getRegion);
 
 $regions = [];
 while ($row2 = $result2->fetch_assoc()) {
-    $regions[$row2['regionID']] = $row2['location']; // Store regionID as key for easy lookup
+    $regions[$row2['regionID']] = $row2['location'];
 }
 
 $successMessage = "";
@@ -57,7 +56,6 @@ if (isset($_POST['make_changes'])) {
     $_SESSION['phone'] = $newPhone;
     $_SESSION['region'] = $newRegion;
 
-    // Check if phone is empty, if so, set it to null (or keep the existing value)
     $phoneUpdatePart = !empty($newPhone) ? "phone='$newPhone'" : "";
 
     if (!array_key_exists($newRegion, $regions)) {
@@ -69,7 +67,6 @@ if (isset($_POST['make_changes'])) {
             $passwordUpdatePart = "password='$newPassword', ";
         }
 
-        // Build the update query with or without the phone update part
         $updateQuery = "UPDATE user SET name='$newName', email='$newEmail', regionID='$newRegion'";
 
         if ($phoneUpdatePart) {
