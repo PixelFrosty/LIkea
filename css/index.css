@@ -1,3 +1,13 @@
+#footer {
+    position: fixed;
+    padding-block:0.5em;
+    padding-inline:0.5em;
+    border-top-right-radius: 0.75em;
+    background: #ddd;
+    color: #555;
+    bottom: 0;
+}
+
 * {
     font-family: "Spline Sans", sans-serif;
 }

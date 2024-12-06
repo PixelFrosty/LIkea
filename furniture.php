@@ -142,6 +142,9 @@ $count = $conn->query($countQuery);
 $countRes = $count->fetch_assoc();
 $itemCount = $countRes['items'];
 
+if (!isset($_SESSION['id'])) {
+    echo "<div id=reminder>Log in to start purchasing items!</div>";
+}
 ?>
 
 <div id="search-form">

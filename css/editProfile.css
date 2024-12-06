@@ -79,7 +79,7 @@
 
 #suggestion {
     width: 20em;
-    position: fixed;
+    position: absolute;
     transform: translateY(3em);
 }
 

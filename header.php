@@ -52,3 +52,7 @@
         </div>
     </div>
 </div>
+
+<div id="footer">
+    2024 Ethan Gretna & Hal Forbis
+</div>

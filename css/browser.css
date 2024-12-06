@@ -1,3 +1,10 @@
+#reminder {
+    margin-top: 0.5em;
+    margin-left: 1em;
+    font-size: 2em;
+    font-weight: 800;
+}
+
 #filter-form {
     margin-left: 2em;
     & > *:not(label) {
