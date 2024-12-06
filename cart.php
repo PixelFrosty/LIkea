@@ -81,10 +81,11 @@ $totalPrice = 0;
             echo "</form>";
 
             echo "<div id='price'>";
-            if ($row['sale'] < 1) {
-                echo "<b id='sale'>$".$row['sale_price']."</b><br><s>$".$row['originalPrice']."</s><br>";
+            if ($row['sale'] <= 0.99) {
+                echo "<span id='saleP'>".((1-$row['sale'])*100)."% Off!</span><br>";
+                echo "<b id='sale'>Now $".$row['sale_price']."</b><br><s>$".$row['originalPrice']."</s><br>";
             } else {
-                echo "<br><b>$".$row['originalPrice']."</b>";
+                echo "<br><br><b>$".$row['originalPrice']."</b>";
             }
             echo "</div>";
             echo "<form method='POST' action='cart.php'>";
