@@ -14,7 +14,6 @@ $mysql_username = "root";
 $mysql_password = "";
 $mysql_dbname = "likeadb";
 
-// Check database connection
 $conn = new mysqli($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -40,12 +39,13 @@ $result2 = $conn->query($getRegion);
 
 $regions = [];
 while ($row2 = $result2->fetch_assoc()) {
-    $regions[$row2['regionID']] = $row2['location']; // Store regionID as key for easy lookup
+    $regions[$row2['regionID']] = $row2['location'];
 }
 
 $successMessage = "";
 $errorMessage = "";
 if (isset($_POST['make_changes'])) {
+
     $get_user = "SELECT password FROM user WHERE email='$email'";
     $result = $conn->query($get_user);
     $validOldPasswordResult = $result->fetch_assoc();

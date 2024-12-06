@@ -1,0 +1,130 @@
+#item_list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12.5em, 1fr));
+    gap: 1em;
+    padding: 1.5em;
+}
+
+#sale {
+    color: green;
+    font-weight: bold;
+}
+
+#count {
+    text-align: right;
+    opacity: 0.5;
+    margin-right: 1.5em;
+    font-size: 0.9em;
+}
+
+#price {
+    margin-top: 1em;
+    text-align: right;
+    font-size: 1em;
+}
+
+#item {
+    border: 0.063em solid #ddd;
+    border-radius: 0.5em;
+    overflow: hidden;
+    padding: 1em;
+    background-color: #f9f9f9;
+    box-shadow: 0 0.25em 0.375em rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0.375em 0.5em rgba(0, 0, 0, 0.15);
+}
+
+#item h3, #item h4 {
+    margin-block-start: 0;
+    margin-block-end: 0.5em;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+#item h3 {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#item h4 {
+    font-size: 1em;
+    font-weight: normal;
+    color: #666;
+}
+
+form {
+    margin-bottom: 1.5em;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    align-items: center;
+}
+
+form select {
+    padding: 0.5em;
+    font-size: 1em;
+    border: 0.063em solid #ccc;
+    border-radius: 0.25em;
+}
+
+form #button {
+    padding: 0.5em 1em;
+    font-size: 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0.25em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 2em;
+}
+
+form #button:hover {
+    background-color: #0056b3;
+}
+
+form #search {
+    flex: 1;
+    padding: 0.5em;
+    font-size: 1em;
+    border: 0.063em solid #ccc;
+    border-radius: 0.25em;
+}
+.ch_container {
+    display: flex;
+    justify-content: center;
+}
+#clear_cart_button {
+    background-color: #f44336; 
+    color: white; 
+    border: none;
+    padding: 1em 2em; 
+    font-size: 1em; 
+    border-radius: 5em; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease;
+    margin-left: 1.5em;
+ 
+}
+
+#clear_cart_button:hover {
+    background-color: #d32f2f; 
+}
+
+#clear_cart_button:active {
+    background-color: #b71c1c; 
+}
+
+#clear_cart_button:focus {
+    outline: none;
+}
+.totalPrice_container {
+    justify-content: left;
+    margin-left: 1.5em;
+
+}
