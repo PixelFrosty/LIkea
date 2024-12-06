@@ -69,6 +69,7 @@ $type = '';
 $material = '';
 $brand = '';
 $year = '';
+$sale = 0;
 if (isset($_SESSION['id'])) {
     $region = $_SESSION['regionID'];
 } else {
@@ -91,7 +92,10 @@ if (isset($_POST['year']) && $_POST['year'] != 'none') {
     $year = $_POST['year'];
 }
 if (isset($_POST['region']) && $_POST['region'] != 'none') {
-    $region = $_POST['region'];  // User selected region
+    $region = $_POST['region'];
+}
+if (isset($_POST['sale'])) {
+    $sale = 1;
 }
 
 // Update query based on filters
@@ -118,6 +122,11 @@ if (!empty($brand)) {
 if (!empty($year)) {
     $itemQuery .= " AND i.year = '$year'";
     $countQuery .= " AND i.year = '$year'";
+}
+
+if ($sale == 1) {
+    $itemQuery .= " AND i.sale <= 0.99";
+    $countQuery .= " AND i.sale <= 0.99";
 }
 
 if ($region !== 'all') {
@@ -167,9 +176,9 @@ $itemCount = $countRes['items'];
         }
         ?>
     </select>
-
-<!-- TODO: ADD FILTER SALES? -->
     
+    <label><input type="checkbox" value="sale" id="sale" name="sale">On Sale</label>
+
     <input type="submit" value="Apply filters" name="apply_filter" id="button">
 </form>
 
@@ -184,12 +193,41 @@ $itemCount = $countRes['items'];
         echo $row['year']."<br>";
         echo "Made from ".$row['material'];
         echo "<div id='price'>";
-        if ($row['sale'] <= 0.09) {
+        if ($row['sale'] <= 0.99) {
             echo "<b id='sale'>$".$row['salePrice']."</b><br><s>$".$row['originalPrice']."</s><br>";
         } else {
             echo "<br><b>$".$row['originalPrice']."</b>";
         }
-        echo "</div></div>";
+
+        echo "</div>";
+            if (isset($_SESSION['id'])) {
+                echo "<div id='purchase'>";
+                echo <<<EOT
+                <form action="" method="post">
+                    <button type="submit" name="cart" id="cart">Add to Cart</button>
+                </form>
+                <div>
+                <button type="button" name="list" id="list">Add to List</button>
+                </div>
+                EOT;
+                echo "</div>";
+            }
+        $lists = $conn->query("SELECT * FROM list WHERE userID = $id");
+        echo "<div id='listpop'>";
+        echo "<div id='col1'>";
+        echo "<select name='type' id='lists'>";
+        while ($row = $lists->fetch_assoc()) { echo "<option value='{$row['listName']}'>{$row['listName']}</option>"; }
+        echo "</select>";
+        echo "<button type='submit' name='listadd' id='listadd'>Add to List</button>";
+        echo "</div>";
+        echo "<button type='submit' name='listmake' id='listmake'>Make New List</button>";
+        echo "<div id='col1'>";
+        echo "</div>";
+
+        echo "</div>";
+        echo "</div>";
     }
     ?>
 </div>
+
+
