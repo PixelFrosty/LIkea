@@ -20,17 +20,17 @@ if (isset($_POST['signup_request'])) {
     $conn = new mysqli($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname) or 
     die("Connection failed: %s\n". $conn -> error);
     
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-    $confpassword = $_POST['confpassword'];
-    $regionID = $_POST['region'];
+    $name = $conn->real_escape_string($_POST['name']);
+    $email = $conn->real_escape_string($_POST['email']);
+    $password = password_hash($conn->real_escape_string($_POST['password']), PASSWORD_BCRYPT);
+    $confpassword = $conn->real_escape_string($_POST['confpassword']);
+    $regionID = $conn->real_escape_string($_POST['region']);
 
     $get_email = "SELECT email FROM user WHERE email='$email'";
     $result = $conn->query($get_email);
     $row = $result->fetch_assoc();
 
-    if ($confpassword !== $_POST['password']) {
+    if ($confpassword !== $conn->real_escape_string($_POST['password'])) {
         // set local variable if invalid signin attempt
         $error = 'Password does not match';
     } elseif (isset($row['email'])){

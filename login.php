@@ -20,8 +20,8 @@ if (isset($_POST['login_request'])) {
     $conn = new mysqli($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname) or 
     die("Connection failed: %s\n". $conn -> error);
     
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = $conn->real_escape_string($_POST['email']);
+    $password = $conn->real_escape_string($_POST['password']);
 
     $get_user = "SELECT name, email, password, userID, regionID FROM user WHERE email='$email'";
     $result = $conn->query($get_user);

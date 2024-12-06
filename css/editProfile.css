@@ -2,11 +2,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh; /* Keeps container centered vertically */
+    height: 150vh;
 }
 
 #notice {
     margin-top: 0;
+}
+
+#region {
+    width: 18em;
+    height: 2.5em;
+    padding: 0;
+    padding-inline: 1em;
 }
 
 #login {
@@ -18,11 +25,56 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10em; /* Adds space from navbar */
-}
 
-#login *:not(#notice):not(form):not(#suggestion):not(#button) {
-    margin-bottom: 1em;
+    & a {
+        display: inline-block;
+        width: 7em;
+        height: 3em;
+        text-align: center;
+        line-height: 3em;
+        border-radius: 2em;
+        text-decoration: none;
+        margin-top: 1em;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out;
+    }
+
+    & a[href="signup.php"] {
+        background-color: #359;
+        color: white;
+        border: 0.1em solid #359;
+    }
+
+    & a[href="signup.php"]:hover {
+        background-color: #248;
+        border-color: #248;
+    }
+
+    & *:not(#notice):not(form):not(#suggestion):not(#button) {
+        margin-bottom: 1em;
+    }
+
+
+    & h4 {
+        font-size: 1.8em;
+        color: #359;
+        font-weight: bold;
+        letter-spacing: 0.1em;
+        margin-bottom: 1em;
+    }
+
+    & p {
+        font-size: 1.2em;
+        color: #555;
+        line-height: 1.5; 
+        margin-bottom: 0.8em; 
+    }
+
+    & p strong {
+        font-weight: bold; 
+        color: #333; 
+    }
+
 }
 
 #suggestion {
@@ -52,38 +104,13 @@ input:not(#button), select {
     height: 3.5em;
     border-radius: 2em;
     border-style: none;
-    transition: background 0.3s ease-in-out, filter 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out;
 }
 
 #button:hover {
     background: #248;
 }
 
-/* Fancy User Information Styling */
-#login h4 {
-    font-family: 'Arial', sans-serif;
-    font-size: 1.8em;
-    color: #359;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    letter-spacing: 0.1em;
-    margin-bottom: 1em;
-}
-
-#login p {
-    font-family: 'Verdana', sans-serif;
-    font-size: 1.2em;
-    color: #555;
-    line-height: 1.5; 
-    margin-bottom: 0.8em; 
-}
-
-#login p strong {
-    font-weight: bold; 
-    color: #333; 
-}
-
-/* Dropdown Styles */
 select {
     background: #ddd;
     width: 18em;
@@ -91,15 +118,13 @@ select {
     border-radius: 2em;
     border: 0.1em solid #000;
     padding-inline: 1em;
-    margin-bottom: 1em; /* Adds space between form fields */
+    margin-bottom: 1em;
 }
 
-/* Hover Effects for Input Fields */
 input:not(#button):hover, select:hover {
     background-color: #f0f0f0;
 }
 
-/* Button Styling for Submit */
 #button {
     color: #fff;
     background: #359;
@@ -114,42 +139,16 @@ input:not(#button):hover, select:hover {
     background-color: #248;
 }
 
-/* Styling for Text Links */
-#login a {
-    display: inline-block;
-    width: 7em;
-    height: 3em;
-    text-align: center;
-    line-height: 3em;
-    border-radius: 2em;
-    text-decoration: none;
-    margin-top: 1em;
-    font-weight: bold;
-    transition: background 0.3s ease-in-out;
-}
-
-/* Blue rounded button for Signup */
-#login a[href="signup.php"] {
-    background-color: #359;
-    color: white;
-    border: 2px solid #359;
-}
-
-#login a[href="signup.php"]:hover {
-    background-color: #248;
-    border-color: #248;
-}
 label {
     display: block;
     font-weight: bold;
-    margin-top: 10px;
-    font-size: 14px; /* Adjust this value as needed */
+    margin-top: 0.5em;
 }
 
 input, select {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
+    margin-top: 0.5em;
+    margin-bottom: 0.10em;
 }
 
