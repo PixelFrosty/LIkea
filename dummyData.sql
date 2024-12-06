@@ -124,7 +124,7 @@ INSERT INTO item (name, type, material, brand, year, price, sale, branchID) VALU
 ('Kleven', 'Appliances', 'Stone', 'Apple', 2023, 820.97, 0.78, 5),
 ('Leira', 'Appliances', 'Stone', 'Ikea', 2016, 275.58, 1, 2);
 
-
+/*
 INSERT INTO list (userID, listName) VALUES
 -- listID = 1-23
 (11, "Wishlist"),
@@ -177,7 +177,7 @@ INSERT INTO inlist (listID, itemID, quantity) VALUES
 (21, 42, 0),
 (22, 42, 1),
 (23, 10, 5);
-
+*/
 INSERT INTO cart (userID, itemID, quantity) VALUES
 (1, 4, 2),
 (2, 8, 5),

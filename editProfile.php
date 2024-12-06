@@ -64,7 +64,6 @@ if (isset($_POST['make_changes'])) {
         $_SESSION['phone'] = $newPhone;
         $_SESSION['region'] = $newRegion;
 
-        // Check if phone is empty, if so, set it to null (or keep the existing value)
         $phoneUpdatePart = !empty($newPhone) ? "phone='$newPhone'" : "";
 
         if (!array_key_exists($newRegion, $regions)) {
@@ -76,7 +75,6 @@ if (isset($_POST['make_changes'])) {
                 $passwordUpdatePart = "password='$newPassword'";
             }
 
-            // Build the update query with or without the phone update part
             $updateQuery = "UPDATE user SET name='$newName', email='$newEmail', regionID='$newRegion'";
 
             if ($phoneUpdatePart) {

@@ -1,0 +1,124 @@
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 5em;
+}
+
+#notice {
+    margin-top: 0;
+}
+
+#region {
+    width: 18em;
+    height: 2.5em;
+    padding: 0;
+    padding-inline: 1em;
+}
+
+#about {
+    text-align: center;
+    background: #ddd;
+    width: 20em;
+    padding: 2em;
+    border-radius: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1em;
+}
+
+#about h4 {
+    font-size: 1.8em;
+    color: #359;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    margin-bottom: 1em;
+}
+
+#about p {
+    font-size: 1.2em;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 0.8em;
+}
+
+#about p strong {
+    font-weight: bold;
+    color: #333;
+}
+
+#suggestion {
+    width: 20em;
+    position: fixed;
+    transform: translateY(3em);
+}
+
+#error {
+    margin-block-end: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+input:not(#button), select {
+    background: #ddd;
+    width: 18em;
+    height: 2.5em;
+    border-radius: 2em;
+    border: 0.1em solid #000;
+    padding-inline: 1em;
+}
+
+#button {
+    color: #fff;
+    background: #359;
+    width: 10em;
+    height: 3.5em;
+    border-radius: 2em;
+    border-style: none;
+    transition: background 0.3s ease-in-out;
+}
+
+#button:hover {
+    background: #248;
+}
+
+select {
+    background: #ddd;
+    width: 18em;
+    height: 2.5em;
+    border-radius: 2em;
+    border: 0.1em solid #000;
+    padding-inline: 1em;
+    margin-bottom: 1em;
+}
+
+input:not(#button):hover, select:hover {
+    background-color: #f0f0f0;
+}
+
+#button {
+    color: #fff;
+    background: #359;
+    width: 10em;
+    height: 3.5em;
+    border-radius: 2em;
+    border: none;
+    transition: background 0.3s ease-in-out;
+}
+
+#button:hover {
+    background-color: #248;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 0.5em;
+}
+
+input, select {
+    width: 100%;
+    padding: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.10em;
+}
