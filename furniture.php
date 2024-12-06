@@ -77,7 +77,7 @@ if (isset($_SESSION['id'])) {
     $region = 'all';
 }
 
-if (isset($_POST['search_button'])) {
+if (isset($_POST['search']) && $_POST['search'] != 'none') {
     $search = $_POST['search'];
 }
 if (isset($_POST['type']) && $_POST['type'] != 'none') {
@@ -144,13 +144,12 @@ $itemCount = $countRes['items'];
 
 ?>
 
-<form id="search-form" method="POST" action="">
+<div id="search-form">
+<form id="search_filters" method="POST" action="">
     <input type="text" id="search" name="search" placeholder="Search for items" value="<?php echo htmlspecialchars($search); ?>" />
     <input type="submit" value="Search" name="search_button" id="button">
-</form>
-
-<form id="filter-form" method="POST" action="">
-    Filter by:
+</div>
+<div id="filter-form">
     <select name="type" id="type">
         <option value="none">Category</option>
         <?php while ($row = $get_type->fetch_assoc()) { echo "<option value='{$row['type']}'>{$row['type']}</option>"; } ?>
@@ -180,8 +179,9 @@ $itemCount = $countRes['items'];
     
     <label><input type="checkbox" value="sale" id="sale" name="sale">On Sale</label>
 
-    <input type="submit" value="Apply filters" name="apply_filter" id="button">
+    <input type="submit" value="Apply filters" class="apply" name="apply_filter" id="button">
 </form>
+</div>
 
 <div id="count">Amount of items: <?php echo $itemCount; ?></div>
 
