@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh; /* Keeps container centered vertically */
+    height: 70vh;
 }
 
 #notice {
@@ -19,7 +19,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 5em; /* Adds space from navbar */
+    margin-top: 5em;
 }
 
 #profile *:not(#notice):not(form):not(#suggestion):not(#button) {
@@ -53,28 +53,26 @@ input:not(#button), select {
     height: 3.5em;
     border-radius: 2em;
     border-style: none;
-    transition: background 0.3s ease-in-out, filter 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out;
 }
 
 #button:hover {
     background: #248;
 }
 
-/* New styles for Edit Profile and Logout buttons */
 #profile a {
-    display: inline-block;  /* Changed from block to inline-block for side-by-side buttons */
-    width: 7em;  /* Adjust width to fit both buttons side by side */
+    display: inline-block;
+    width: 7em;
     height: 3em;
     text-align: center;
     line-height: 3em;
     border-radius: 2em;
     text-decoration: none;
-    margin: 0 0.5em 1em 0; /* Adds space between buttons */
+    margin: 0 0.5em 1em 0;
     font-weight: bold;
     transition: background 0.3s ease-in-out;
 }
 
-/* Blue rounded button for Edit Profile */
 #profile a[href="editProfile.php"] {
     background-color: #359;
     color: white;
@@ -86,7 +84,6 @@ input:not(#button), select {
     border-color: #248;
 }
 
-/* Red rounded rectangle for Logout */
 #profile a[href="logout.php"] {
     background-color: red;
     color: white;
@@ -98,19 +95,15 @@ input:not(#button), select {
     border-color: #d32f2f;
 }
 
-/* Fancy User Information Styling */
 #profile h4 {
-    font-family: 'Arial', sans-serif;
     font-size: 1.8em;
     color: #359;
     font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     letter-spacing: 0.1em;
     margin-bottom: 1em;
 }
 
 #profile p {
-    font-family: 'Verdana', sans-serif;
     font-size: 1.2em;
     color: #555;
     line-height: 1.5; 

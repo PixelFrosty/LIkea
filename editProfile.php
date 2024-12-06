@@ -45,50 +45,58 @@ while ($row2 = $result2->fetch_assoc()) {
 
 $successMessage = "";
 $errorMessage = "";
-
 if (isset($_POST['make_changes'])) {
-    $newName = mysqli_real_escape_string($conn, $_POST['name']);
-    $newEmail = mysqli_real_escape_string($conn, $_POST['email']);
-    $newPhone = mysqli_real_escape_string($conn, $_POST['phone']);
-    $newRegion = mysqli_real_escape_string($conn, $_POST['region']);
+    $get_user = "SELECT password FROM user WHERE email='$email'";
+    $result = $conn->query($get_user);
+    $validOldPasswordResult = $result->fetch_assoc();
+    $validOldPassword = $validOldPasswordResult['password'];
 
-    $_SESSION['email'] = $newEmail;
-    $_SESSION['username'] = $newName;
-    $_SESSION['phone'] = $newPhone;
-    $_SESSION['region'] = $newRegion;
+    $oldPassword = $conn->real_escape_string($_POST['ogpassword']);
+    
+    if (password_verify($oldPassword, $validOldPassword)) {
+        $newName = $conn->real_escape_string($_POST['name']);
+        $newEmail = $conn->real_escape_string($_POST['email']);
+        $newPhone = $conn->real_escape_string($_POST['phone']);
+        $newRegion = $conn->real_escape_string($_POST['region']);
 
-    // Check if phone is empty, if so, set it to null (or keep the existing value)
-    $phoneUpdatePart = !empty($newPhone) ? "phone='$newPhone'" : "";
+        $_SESSION['email'] = $newEmail;
+        $_SESSION['username'] = $newName;
+        $_SESSION['phone'] = $newPhone;
+        $_SESSION['region'] = $newRegion;
 
-    if (!array_key_exists($newRegion, $regions)) {
-        $errorMessage = "Invalid region selected.";
-    } else {
-        $passwordUpdatePart = '';
-        if (!empty($_POST['password'])) {
-            $newPassword = mysqli_real_escape_string($conn, $_POST['password']);
-            $passwordUpdatePart = "password='$newPassword', ";
-        }
+        // Check if phone is empty, if so, set it to null (or keep the existing value)
+        $phoneUpdatePart = !empty($newPhone) ? "phone='$newPhone'" : "";
 
-        // Build the update query with or without the phone update part
-        $updateQuery = "UPDATE user SET name='$newName', email='$newEmail', regionID='$newRegion'";
-
-        if ($phoneUpdatePart) {
-            $updateQuery .= ", $phoneUpdatePart";
-        }
-
-        if ($passwordUpdatePart) {
-            $updateQuery .= ", " . $passwordUpdatePart;
-        }
-
-        $updateQuery .= " WHERE userID='$userID'";
-
-        if ($conn->query($updateQuery) === TRUE) {
-            $successMessage = "Profile updated successfully!";
-            header("Location: editProfile.php");
-            exit;
+        if (!array_key_exists($newRegion, $regions)) {
+            $errorMessage = "Invalid region selected.";
         } else {
-            $errorMessage = "Error updating profile: " . $conn->error;
+            $passwordUpdatePart = '';
+            if (!empty($_POST['password'])) {
+                $newPassword = password_hash($conn->real_escape_string($_POST['password']), PASSWORD_BCRYPT);
+                $passwordUpdatePart = "password='$newPassword'";
+            }
+
+            // Build the update query with or without the phone update part
+            $updateQuery = "UPDATE user SET name='$newName', email='$newEmail', regionID='$newRegion'";
+
+            if ($phoneUpdatePart) {
+                $updateQuery .= ", $phoneUpdatePart";
+            }
+
+            if ($passwordUpdatePart) {
+                $updateQuery .= ", " . $passwordUpdatePart;
+            }
+
+            $updateQuery .= " WHERE userID='$userID'";
+
+            if ($conn->query($updateQuery) === TRUE) {
+                $successMessage = "Profile updated successfully!";
+            } else {
+                $errorMessage = "Error updating profile: " . $conn->error;
+            }
         }
+    } else {
+        $errorMessage = "Password was incorrect" . $conn->error;
     }
 }
 
@@ -113,8 +121,12 @@ $conn->close();
             <input type="text" id="phone" name="phone" placeholder="Phone" value="<?php echo htmlspecialchars($phone); ?>">
             <br>
 
-            <label for="password">Password (leave empty to keep current):</label>
-            <input type="password" id="password" name="password" placeholder="Password">
+            <label for="password">New Password (leave empty to keep current):</label>
+            <input type="password" id="password" name="password" placeholder="New Password">
+            <br>
+
+            <label for="ogpassword">Old Password (Required):</label>
+            <input type="password" id="ogpassword" required name="ogpassword" placeholder="Password">
             <br>
 
             <label for="region">Select Region:</label>
