@@ -1,5 +1,6 @@
 <?php
 session_start();
+$cssfile = 'signedUp.css';
 include 'header.php';
 
 if (isset($_SESSION['id'])) {
@@ -8,5 +9,9 @@ if (isset($_SESSION['id'])) {
 }
 ?>
 
-<div>Signup Successful!</div>
-<a href="login.php">Login with your new account to continue.</a>
+<div id="container">
+    <div id="message-box">
+        <div>Signup Successful!</div>
+        <a href="login.php">Login with your new account to continue.</a>
+    </div>
+</div>
