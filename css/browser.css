@@ -1,8 +1,39 @@
+#purchase {
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+    gap: 0.6em;
+    
+    & button {
+        width: 15em;
+        height: 2em;
+        border-radius: 0.6em;
+        border-style: none;
+        padding: 0.2em;
+        background: #359;
+        color: white;
+        transition: background 0.3s ease-in-out;
+
+        &:hover {
+            background: #248;
+        }
+    }
+}
+
+
 #item_list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 0.8em;
     padding: 1.5em;
+}
+
+#saleP {
+    color: green;
+    width: 5em;
+    position: relative;
+    font-size: 0.75em;
+    transform: translate(-5em,-4.5em);
 }
 
 #sale {
@@ -22,7 +53,7 @@
 
 #item {
     border: 0.1em solid #ddd;
-    border-radius: 8px;
+    border-radius: 1em;
     overflow: hidden;
     padding: 15px;
 

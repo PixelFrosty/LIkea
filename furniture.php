@@ -1,5 +1,6 @@
 <?php
 session_start();
+sleep(0.5);
 $cssfile = "browser.css";
 include 'header.php';
 
@@ -44,7 +45,7 @@ $itemQuery = <<<'EOT'
 SELECT *
 FROM (
     SELECT 
-        i.itemID,
+        i.itemID AS itemID,
         i.name AS item_name, 
         i.type AS item_type, 
         i.material, 
@@ -69,6 +70,7 @@ $type = '';
 $material = '';
 $brand = '';
 $year = '';
+$sale = 0;
 if (isset($_SESSION['id'])) {
     $region = $_SESSION['regionID'];
 } else {
@@ -91,7 +93,10 @@ if (isset($_POST['year']) && $_POST['year'] != 'none') {
     $year = $_POST['year'];
 }
 if (isset($_POST['region']) && $_POST['region'] != 'none') {
-    $region = $_POST['region'];  // User selected region
+    $region = $_POST['region'];
+}
+if (isset($_POST['sale'])) {
+    $sale = 1;
 }
 
 // Update query based on filters
@@ -118,6 +123,11 @@ if (!empty($brand)) {
 if (!empty($year)) {
     $itemQuery .= " AND i.year = '$year'";
     $countQuery .= " AND i.year = '$year'";
+}
+
+if ($sale == 1) {
+    $itemQuery .= " AND i.sale <= 0.99";
+    $countQuery .= " AND i.sale <= 0.99";
 }
 
 if ($region !== 'all') {
@@ -167,9 +177,9 @@ $itemCount = $countRes['items'];
         }
         ?>
     </select>
-
-<!-- TODO: ADD FILTER SALES? -->
     
+    <label><input type="checkbox" value="sale" id="sale" name="sale">On Sale</label>
+
     <input type="submit" value="Apply filters" name="apply_filter" id="button">
 </form>
 
@@ -184,12 +194,43 @@ $itemCount = $countRes['items'];
         echo $row['year']."<br>";
         echo "Made from ".$row['material'];
         echo "<div id='price'>";
-        if ($row['sale'] <= 0.09) {
-            echo "<b id='sale'>$".$row['salePrice']."</b><br><s>$".$row['originalPrice']."</s><br>";
+        if ($row['sale'] <= 0.99) {
+            echo "<span id='saleP'>".((1-$row['sale'])*100)."% Off!</span><br>";
+            echo "<b id='sale'>Now $".$row['salePrice']."</b><br><s>$".$row['originalPrice']."</s><br>";
         } else {
-            echo "<br><b>$".$row['originalPrice']."</b>";
+            echo "<br><br><b>$".$row['originalPrice']."</b>";
         }
-        echo "</div></div>";
+        echo "</div>";
+
+            if (isset($_SESSION['id'])) {
+                $quantity = 0;
+                $res = $conn->query("SELECT quantity FROM cart WHERE itemID = {$row['itemID']} and userID = {$_SESSION['id']}");
+                $quantityRes = $res->fetch_assoc();
+                if (isset($quantityRes)) { $quantity = $quantityRes['quantity']; }
+                if ($quantity > 0) { $cartText = "$quantity in cart.";}
+                else { $cartText = "Add to Cart";}
+                echo <<<EOT
+                <div id='purchase'>
+                    <form action="" method="post">
+                        <input type="hidden" name="itemID" id="itemID" value={$row['itemID']}>
+                        <button type="submit" name="cart" id="cart">$cartText</button>
+                    </form>
+                </div>
+                EOT;
+            }
+
+        echo "</div>";
     }
+
+    if (isset($_POST['cart'])) {
+        $cartQuery = <<<EOT
+        INSERT INTO cart (userID, itemID, quantity)
+        VALUES ({$_SESSION['id']}, {$_POST['itemID']}, 1)
+        ON DUPLICATE KEY UPDATE 
+            quantity = quantity + 1;
+        EOT;
+        $conn->query($cartQuery);
+    }
+    
     ?>
 </div>
