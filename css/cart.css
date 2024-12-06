@@ -123,4 +123,8 @@ form #search {
 #clear_cart_button:focus {
     outline: none;
 }
+.totalPrice_container {
+    justify-content: left;
+    margin-left: 1.5em;
 
+}

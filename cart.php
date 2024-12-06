@@ -87,12 +87,10 @@ $totalPrice = 0;
                 echo "<br><b>$".$row['originalPrice']."</b>";
             }
             echo "</div>";
-
             echo "<form method='POST' action='cart.php'>";
             echo "<input type='hidden' name='itemID' value='".$row['itemID']."'>";
             echo "<button type='submit' name='remove_item' id='button'>Remove from cart</button>";
             echo "</form>";
-
             echo "</div>";
         }
     } else {
@@ -100,7 +98,7 @@ $totalPrice = 0;
     }
     ?>
 </div>
-<div class='ch_container'>
+<div class='totalPrice_container'>
     <div id="total_price">
         <b>Total: $<?php echo number_format($totalPrice, 2); ?></b>
     </div>
