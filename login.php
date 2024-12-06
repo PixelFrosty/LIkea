@@ -33,7 +33,7 @@ if (isset($_POST['login_request'])) {
         $_SESSION['username'] = $row['name'];
         $_SESSION['id'] = $row['userID'];
         $_SESSION['date'] = $row['date'];
-        $_SESSION['region'] = $row['regionID'];
+        $_SESSION['regionID'] = $row['regionID'];
 
         header("Location: home.php");
         exit;

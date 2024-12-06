@@ -1,16 +1,30 @@
 #item_list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Creates a responsive grid */
-    gap: 20px; /* Space between items */
-    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.8em;
+    padding: 1.5em;
+}
+
+#sale {
+    color: green;
+}
+
+#count {
+    text-align: right;
+    opacity: 0.25;
+    margin-right: 1.5em;
+}
+
+#price {
+    margin-top: 1em;
+    text-align: right;
 }
 
 #item {
-    border: 1px solid #ddd;
+    border: 0.1em solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     padding: 15px;
-    background-color: #fff;
 
     & h3, h4 {
         margin-block-start: 0;

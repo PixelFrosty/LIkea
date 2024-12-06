@@ -4,32 +4,42 @@ $cssfile = "browser.css";
 include 'header.php';
 
 $loggedIn = False;
+$selectedRegionID = null;  // Variable to hold the selected region ID
+
+// Check if the user is logged in
 if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
     $loggedIn = True;
+    $selectedRegionID = $_SESSION['regionID'];
 }
 
-$search = '';
-?>
-
-<form method="POST" action="">
-    <input type="text" id="search" name="search" placeholder="Search for items" required value="<?php echo htmlspecialchars($search); ?>">
-    <input type="submit" value="Search" name="search_button" id="button">
-</form>
-
-<?php
 $mysql_servername = 'localhost';
 $mysql_username = "root";
 $mysql_password = "";
 $mysql_dbname = "likeadb";
-$conn = new mysqli($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname) or 
-die("Connection failed: %s\n". $conn -> error);
+$conn = new mysqli($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname) or die("Connection failed: %s\n". $conn -> error);
 
-// to find all existing filters
+// Get filters (for dropdown options)
 $get_type = $conn->query("SELECT DISTINCT type FROM item");
 $get_material = $conn->query("SELECT DISTINCT material FROM item");
 $get_brand = $conn->query("SELECT DISTINCT brand FROM item");
 $get_year = $conn->query("SELECT DISTINCT year FROM item");
+$get_regions = $conn->query("SELECT regionID, location FROM region");
+
+// Count item query
+$countQuery = <<<'EOT'
+SELECT
+    COUNT(*) as items
+FROM
+    item i
+JOIN
+    branch b ON i.branchID = b.branchID
+JOIN
+    region r ON b.regionID = r.regionID
+WHERE true
+EOT;
+
+// Base item query
 $itemQuery = <<<'EOT'
 SELECT *
 FROM (
@@ -42,6 +52,7 @@ FROM (
         i.year, 
         i.price AS originalPrice,
         ROUND(i.price * i.sale, 2) AS salePrice,
+        i.sale,
         r.location AS region
     FROM 
         item i
@@ -49,92 +60,136 @@ FROM (
         branch b ON i.branchID = b.branchID
     JOIN 
         region r ON b.regionID = r.regionID
-    JOIN 
-        user u ON u.regionID = r.regionID
+    WHERE true
 EOT;
 
-if ($loggedIn === True && isset($_POST['search'])) {
-    $itemQuery .= "WHERE";
-    if ($loggedIn === True) {
-        $itemQuery .= "u.userID = $id";
-    }
-    if (isset($search)) {
-        $itemQuery .= "AND i.name = $search";
-    }
+// Handle search and filters
+$search = '';
+$type = '';
+$material = '';
+$brand = '';
+$year = '';
+if (isset($_SESSION['id'])) {
+    $region = $_SESSION['regionID'];
+} else {
+    $region = 'all';
+}
+
+if (isset($_POST['search_button'])) {
+    $search = $_POST['search'];
+}
+if (isset($_POST['type']) && $_POST['type'] != 'none') {
+    $type = $_POST['type'];
+}
+if (isset($_POST['material']) && $_POST['material'] != 'none') {
+    $material = $_POST['material'];
+}
+if (isset($_POST['brand']) && $_POST['brand'] != 'none') {
+    $brand = $_POST['brand'];
+}
+if (isset($_POST['year']) && $_POST['year'] != 'none') {
+    $year = $_POST['year'];
+}
+if (isset($_POST['region']) && $_POST['region'] != 'none') {
+    $region = $_POST['region'];  // User selected region
+}
+
+// Update query based on filters
+if (!empty($search)) {
+    $itemQuery .= " AND i.name LIKE '%$search%'";
+    $countQuery .= " AND i.name LIKE '%$search%'";
+}
+
+if (!empty($type)) {
+    $itemQuery .= " AND i.type = '$type'";
+    $countQuery .= " AND i.type = '$type'";
+}
+
+if (!empty($material)) {
+    $itemQuery .= " AND i.material = '$material'";
+    $countQuery .= " AND i.material = '$material'";
+}
+
+if (!empty($brand)) {
+    $itemQuery .= " AND i.brand = '$brand'";
+    $countQuery .= " AND i.brand = '$brand'";
+}
+
+if (!empty($year)) {
+    $itemQuery .= " AND i.year = '$year'";
+    $countQuery .= " AND i.year = '$year'";
+}
+
+if ($region !== 'all') {
+    $itemQuery .= " AND r.regionID = '$region'";
+    $countQuery .= " AND r.regionID = '$region'";
 }
 
 $itemQuery .= ") AS furnitureAvailableInRegion;";
 
 $items = $conn->query($itemQuery);
-$count = $conn->query("SELECT COUNT(*) as items FROM item");
+$count = $conn->query($countQuery);
+$countRes = $count->fetch_assoc();
+$itemCount = $countRes['items'];
 
-if (isset($_POST['search'])) {
-    $search = $_POST['search'];
-}
 ?>
 
-<form method="POST" action="">
-    Filter by:
-    <select name="type" id="type">
-        <option value='none'>Category</option>
-        <?php
-            // type dropdown
-            while ($row = $get_type -> fetch_assoc()) {
-                $type = $row['type'];
-                echo "<option value='$type'>$type</option>";
-            }
-        ?>
-    </select>
-    <select name="material" id="material">
-        <option value='none'>Material</option>
-        <?php
-            // material dropdown
-            while ($row = $get_material -> fetch_assoc()) {
-                $material = $row['material'];
-                echo "<option value='$material'>$material</option>";
-            }
-        ?>
-    </select>
-    <select name="brand" id="brand">
-        <option value='none'>Brand</option>
-        <?php
-            // brand dropdown
-            while ($row = $get_brand -> fetch_assoc()) {
-                $brand = $row['brand'];
-                echo "<option value='$brand'>$brand</option>";
-            }
-        ?>
-    </select>
-    <select name="year" id="year">
-        <option value='none'>Year of make</option>
-        <?php
-            // year dropdown
-            while ($row = $get_year -> fetch_assoc()) {
-                $year = $row['year'];
-                echo "<option value='$year'>$year</option>";
-            }
-        ?>
-    </select>
-<input type="submit" value="Apply filters" name="apply_filter" id="button">
+<form id="search-form" method="POST" action="">
+    <input type="text" id="search" name="search" placeholder="Search for items" value="<?php echo htmlspecialchars($search); ?>" />
+    <input type="submit" value="Search" name="search_button" id="button">
 </form>
 
-<?php
-$countRes = $count -> fetch_assoc();
-$itemCount = $countRes['items'];
-echo "<div id='count'> Amount of items: $itemCount </div>";
+<form id="filter-form" method="POST" action="">
+    Filter by:
+    <select name="type" id="type">
+        <option value="none">Category</option>
+        <?php while ($row = $get_type->fetch_assoc()) { echo "<option value='{$row['type']}'>{$row['type']}</option>"; } ?>
+    </select>
+    <select name="material" id="material">
+        <option value="none">Material</option>
+        <?php while ($row = $get_material->fetch_assoc()) { echo "<option value='{$row['material']}'>{$row['material']}</option>"; } ?>
+    </select>
+    <select name="brand" id="brand">
+        <option value="none">Brand</option>
+        <?php while ($row = $get_brand->fetch_assoc()) { echo "<option value='{$row['brand']}'>{$row['brand']}</option>"; } ?>
+    </select>
+    <select name="year" id="year">
+        <option value="none">Year of make</option>
+        <?php while ($row = $get_year->fetch_assoc()) { echo "<option value='{$row['year']}'>{$row['year']}</option>"; } ?>
+    </select>
 
-echo "<div id='item_list'>";
-while ($row = $items -> fetch_assoc()) {
-    echo "<div id='item'>"
-."<h3>".$row['item_name']."</h3>"
-."<h4>".$row['brand']."</h4>"
-.$row['item_type']."<br>"
-.$row['material']."<br>"
-.$row['year']."<br>"
-.$row['originalPrice']."<br>"
-.$row['salePrice']."<br>"
-."</div>";
-}
-echo "</div>";
-?>
+    <select name="region" id="region">
+        <option value="all" <?php echo ($region == 'all') ? 'selected' : ''; ?>>All Regions</option>
+        <?php 
+        while ($row = $get_regions->fetch_assoc()) {
+            $selected = ($row['regionID'] == $selectedRegionID) ? 'selected' : '';
+            echo "<option value='{$row['regionID']}' {$selected}>{$row['location']}</option>";
+        }
+        ?>
+    </select>
 
+<!-- TODO: ADD FILTER SALES? -->
+    
+    <input type="submit" value="Apply filters" name="apply_filter" id="button">
+</form>
+
+<div id="count">Amount of items: <?php echo $itemCount; ?></div>
+
+<div id="item_list">
+    <?php
+    while ($row = $items->fetch_assoc()) {
+        echo "<div id='item'>";
+        echo "<h3>".$row['item_name']."</h3>";
+        echo "<h4>".$row['brand']."</h4>";
+        echo $row['year']."<br>";
+        echo "Made from ".$row['material'];
+        echo "<div id='price'>";
+        if ($row['sale'] <= 0.09) {
+            echo "<b id='sale'>$".$row['salePrice']."</b><br><s>$".$row['originalPrice']."</s><br>";
+        } else {
+            echo "<br><b>$".$row['originalPrice']."</b>";
+        }
+        echo "</div></div>";
+    }
+    ?>
+</div>
