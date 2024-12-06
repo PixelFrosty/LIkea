@@ -81,6 +81,7 @@ form #button {
     border-radius: 0.25em;
     cursor: pointer;
     transition: background-color 0.2s;
+    margin-top: 2em;
 }
 
 form #button:hover {
@@ -94,6 +95,32 @@ form #search {
     border: 0.063em solid #ccc;
     border-radius: 0.25em;
 }
-h2 {
-    text-align: center;
+.ch_container {
+    display: flex;
+    justify-content: center;
 }
+#clear_cart_button {
+    background-color: #f44336; 
+    color: white; 
+    border: none;
+    padding: 1em 2em; 
+    font-size: 1em; 
+    border-radius: 5em; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease;
+    margin-left: 1.5em;
+ 
+}
+
+#clear_cart_button:hover {
+    background-color: #d32f2f; 
+}
+
+#clear_cart_button:active {
+    background-color: #b71c1c; 
+}
+
+#clear_cart_button:focus {
+    outline: none;
+}
+

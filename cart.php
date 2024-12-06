@@ -1,6 +1,6 @@
 <?php
 session_start();
-$cssfile = "browser.css";
+$cssfile = "cart.css";
 include 'header.php';
 
 if (!isset($_SESSION['id'])) {
@@ -15,6 +15,25 @@ $mysql_dbname = "likeadb";
 $conn = new mysqli($mysql_servername, $mysql_username, $mysql_password, $mysql_dbname) or die("Connection failed: %s\n". $conn -> error);
 
 $userID = $_SESSION['id'];
+
+if (isset($_POST['update_quantity'])) {
+    $itemID = $_POST['itemID'];
+    $newQuantity = $_POST['quantity'];
+    $updateQuery = "UPDATE cart SET quantity = $newQuantity WHERE userID = $userID AND itemID = $itemID";
+    $conn->query($updateQuery);
+}
+
+if (isset($_POST['remove_item'])) {
+    $itemID = $_POST['itemID'];
+    $deleteQuery = "DELETE FROM cart WHERE userID = $userID AND itemID = $itemID";
+    $conn->query($deleteQuery);
+}
+
+if (isset($_POST['clear_cart'])) {
+    $clearQuery = "DELETE FROM cart WHERE userID = $userID";
+    $conn->query($clearQuery);
+}
+
 $itemQuery = <<<EOT
 SELECT 
     i.itemID,
@@ -35,19 +54,32 @@ WHERE
 EOT;
 
 $items = $conn->query($itemQuery);
+$totalPrice = 0;
 ?>
+
+<div class='ch_container'>
+    <h2 class='center-header'>Your cart</h2>
+</div>
 
 <div id="item_list">
     <?php
-    echo "<h2>Your cart</h2>";
     if ($items->num_rows > 0) {
         while ($row = $items->fetch_assoc()) {
+            $itemTotalPrice = $row['sale_price'] * $row['item_quantity'];
+            $totalPrice += $itemTotalPrice;
+
             echo "<div id='item'>";
             echo "<h3>".$row['item_name']."</h3>";
             echo "<h4>".$row['brand']."</h4>";
             echo $row['year']."<br>";
             echo "Made from ".$row['material']."<br>";
-            echo "Quantity: ".$row['item_quantity']."<br>";
+
+            echo "<form method='POST' action='cart.php' style='display: inline;'>";
+            echo "Quantity: <input type='number' name='quantity' value='".$row['item_quantity']."' min='1' required style='width: 50px; padding: 5px;'>";
+            echo "<input type='hidden' name='itemID' value='".$row['itemID']."'>";
+            echo "<button type='submit' name='update_quantity' id='button' style='padding: 5px 10px;'>Update</button>";
+            echo "</form>";
+
             echo "<div id='price'>";
             if ($row['sale'] < 1) {
                 echo "<b id='sale'>$".$row['sale_price']."</b><br><s>$".$row['originalPrice']."</s><br>";
@@ -55,10 +87,12 @@ $items = $conn->query($itemQuery);
                 echo "<br><b>$".$row['originalPrice']."</b>";
             }
             echo "</div>";
-            echo "<form method='POST' action='remove_from_cart.php'>";
+
+            echo "<form method='POST' action='cart.php'>";
             echo "<input type='hidden' name='itemID' value='".$row['itemID']."'>";
-            echo "<button id='button'>Remove from cart</button>";
+            echo "<button type='submit' name='remove_item' id='button'>Remove from cart</button>";
             echo "</form>";
+
             echo "</div>";
         }
     } else {
@@ -66,3 +100,11 @@ $items = $conn->query($itemQuery);
     }
     ?>
 </div>
+<div class='ch_container'>
+    <div id="total_price">
+        <b>Total: $<?php echo number_format($totalPrice, 2); ?></b>
+    </div>
+</div>
+<form method="POST" action="cart.php">
+    <button type="submit" name="clear_cart" id="clear_cart_button">Clear Cart</button>
+</form>
