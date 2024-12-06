@@ -327,7 +327,6 @@ WHERE userID = <userID>
 
 SELECT 
 -- Get branch info based on user region
-    b.managerName AS Manager_Name,
     b.branchPhoneNumber AS Branch_Phone_Number,
     b.branchAddr AS Branch_Address
     r.location AS Location
