@@ -11,7 +11,10 @@ include 'header.php';
     </div>
 
     <div id="browse">
-        <h4>Just looking?</h4>
+        <?php
+        if (isset($_SESSION['id'])) { echo "<h4>Start browsing!</h4>"; }
+        else { echo "<h4>Just looking?</h4>"; }
+        ?>
         <br>
         <div id="cont">
             <a href="furniture.php">
@@ -22,24 +25,30 @@ include 'header.php';
         </div>
     </div>
 
-    <div id="login">
-        <h4>Want to start shopping?</h4>
-        <br>
-        <div id="buttons">
-            <div id="cont">
-                <a href="login.php">
-                    <div id="button1">
-                        Log into your account
+    <?php
+    if (!isset($_SESSION['id'])) {
+        echo <<<EOT
+            <div id="login">
+                <h4>Want to start shopping?</h4>
+                <br>
+                <div id="buttons">
+                    <div id="cont">
+                        <a href="login.php">
+                            <div id="button1">
+                                Log into your account
+                            </div>
+                        </a>
                     </div>
-                </a>
-            </div>
-            <div id="cont">
-                <a href="signup.php">
-                    <div id="button2">
-                        Make an account
+                    <div id="cont">
+                        <a href="signup.php">
+                            <div id="button2">
+                                Make an account
+                            </div>
+                        </a>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+        EOT;
+    }
+    ?>

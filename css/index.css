@@ -6,6 +6,7 @@
     background: #ddd;
     color: #555;
     bottom: 0;
+    z-index: 2;
 }
 
 * {

@@ -1,5 +1,30 @@
-#myBody {
+body {
+    overflow: hidden;
+}
 
+@keyframes slideFadeIn {
+    0% {
+        transform: translateY(25%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes sleep {
+    0% {
+        transform: translateY(25%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(25%);
+        opacity: 0;
+    }
+}
+
+#myBody {
     & a {
         color: white;
         text-decoration: none;
@@ -41,5 +66,15 @@
     }
 
     & #buttons {
+    }
+
+    animation: 1s ease-out 0s 1 slideFadeIn;
+
+    & #browse {
+        animation: 1s ease-out 1.25s 1 slideFadeIn, 1.25s ease-out 0s 1 sleep;
+    }
+
+    & #login {
+        animation: 1s ease-out 2.25s 1 slideFadeIn, 2.25s ease-out 0s 1 sleep;
     }
 }

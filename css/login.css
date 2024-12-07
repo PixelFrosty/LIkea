@@ -25,6 +25,10 @@
         width: 20em;
         position: absolute;
         transform: translateY(3em);
+
+        & > a {
+            color: #359 !important;
+        }
     }
 }
 
