@@ -64,7 +64,7 @@ if (isset($_POST['make_changes'])) {
         $_SESSION['phone'] = $newPhone;
         $_SESSION['region'] = $newRegion;
 
-        $phoneUpdatePart = !empty($newPhone) ? "phone='$newPhone'" : "";
+        $phoneUpdatePart = !empty($newPhone) ? "phone = ?" : "";
 
         if (!array_key_exists($newRegion, $regions)) {
             $errorMessage = "Invalid region selected.";
@@ -72,22 +72,35 @@ if (isset($_POST['make_changes'])) {
             $passwordUpdatePart = '';
             if (!empty($_POST['password'])) {
                 $newPassword = password_hash($conn->real_escape_string($_POST['password']), PASSWORD_BCRYPT);
-                $passwordUpdatePart = "password='$newPassword'";
+                $passwordUpdatePart = "password = ?";
             }
 
-            $updateQuery = "UPDATE user SET name='$newName', email='$newEmail', regionID='$newRegion'";
+            $updateQuery = "UPDATE user SET name = ?, email = ?, regionID = ?";
+            
+            $updateParams = [$newName, $newEmail, $newRegion];
+            $updateTypes = "sss";
 
             if ($phoneUpdatePart) {
                 $updateQuery .= ", $phoneUpdatePart";
+                $updateParams[] .= $newPhone;
+                $updateTypes .= "s";
             }
 
             if ($passwordUpdatePart) {
-                $updateQuery .= ", " . $passwordUpdatePart;
+                $updateQuery .= ", $passwordUpdatePart";
+                $updateParams[] .= $newPassword;
+                $updateTypes .= "s";
             }
 
             $updateQuery .= " WHERE userID='$userID'";
 
-            if ($conn->query($updateQuery) === TRUE) {
+            $stmt = $conn->prepare($updateQuery);
+            if (count($updateParams) > 0) {
+                $stmt->bind_param($updateTypes, ...$updateParams);
+            }
+
+            if ($stmt->execute() === TRUE) {
+                $stmt->close();
                 $successMessage = "Profile updated successfully!";
             } else {
                 $errorMessage = "Error updating profile: " . $conn->error;
@@ -112,11 +125,11 @@ $conn->close();
             <br>
 
             <label for="email">Email (leave empty to keep current):</label>
-            <input type="text" id="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>">
+            <input type="email" id="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($email); ?>">
             <br>
 
             <label for="phone">Phone (leave empty to keep current):</label>
-            <input type="text" id="phone" name="phone" placeholder="Phone" value="<?php echo htmlspecialchars($phone); ?>">
+            <input type="tel" id="phone" pattern="\d{3}[\-]\d{3}[\-]\d{4}" name="phone" placeholder="Phone" value="<?php echo htmlspecialchars($phone); ?>">
             <br>
 
             <label for="password">New Password (leave empty to keep current):</label>

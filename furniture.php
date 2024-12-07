@@ -5,9 +5,8 @@ $cssfile = "browser.css";
 include 'header.php';
 
 $loggedIn = False;
-$selectedRegionID = null;  // Variable to hold the selected region ID
+$selectedRegionID = null;
 
-// Check if the user is logged in
 if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
     $loggedIn = True;
@@ -27,7 +26,10 @@ $get_brand = $conn->query("SELECT DISTINCT brand FROM item");
 $get_year = $conn->query("SELECT DISTINCT year FROM item");
 $get_regions = $conn->query("SELECT regionID, location FROM region");
 
-// Count item query
+// bind_param() variables
+$searchParams = [];
+$searchTypes = "";
+
 $countQuery = <<<'EOT'
 SELECT
     COUNT(*) as items
@@ -40,7 +42,6 @@ JOIN
 WHERE true
 EOT;
 
-// Base item query
 $itemQuery = <<<'EOT'
 SELECT *
 FROM (
@@ -64,19 +65,17 @@ FROM (
     WHERE true
 EOT;
 
-// Handle search and filters
 $search = '';
 $type = '';
 $material = '';
 $brand = '';
 $year = '';
 $sale = 0;
+$region = 'all';
+
 if (isset($_SESSION['id'])) {
     $region = $_SESSION['regionID'];
-} else {
-    $region = 'all';
 }
-
 if (isset($_POST['search']) && $_POST['search'] != 'none') {
     $search = $_POST['search'];
 }
@@ -94,35 +93,45 @@ if (isset($_POST['year']) && $_POST['year'] != 'none') {
 }
 if (isset($_POST['region']) && $_POST['region'] != 'none') {
     $region = $_POST['region'];
+    $selectedRegionID = $region;
 }
 if (isset($_POST['sale'])) {
     $sale = 1;
 }
 
-// Update query based on filters
 if (!empty($search)) {
-    $itemQuery .= " AND i.name LIKE '%$search%'";
-    $countQuery .= " AND i.name LIKE '%$search%'";
+    $itemQuery .= " AND i.name LIKE ?";
+    $countQuery .= " AND i.name LIKE ?";
+    $searchParams[] .= "%$search%";
+    $searchTypes .= "s";
 }
 
 if (!empty($type)) {
-    $itemQuery .= " AND i.type = '$type'";
-    $countQuery .= " AND i.type = '$type'";
+    $itemQuery .= " AND i.type = ?";
+    $countQuery .= " AND i.type = ?";
+    $searchParams[] .= "$type";
+    $searchTypes .= "s";
 }
 
 if (!empty($material)) {
-    $itemQuery .= " AND i.material = '$material'";
-    $countQuery .= " AND i.material = '$material'";
+    $itemQuery .= " AND i.material = ?";
+    $countQuery .= " AND i.material = ?";
+    $searchParams[] .= "$material";
+    $searchTypes .= "s";
 }
 
 if (!empty($brand)) {
-    $itemQuery .= " AND i.brand = '$brand'";
-    $countQuery .= " AND i.brand = '$brand'";
+    $itemQuery .= " AND i.brand = ?";
+    $countQuery .= " AND i.brand = ?";
+    $searchParams[] .= "$brand";
+    $searchTypes .= "s";
 }
 
 if (!empty($year)) {
-    $itemQuery .= " AND i.year = '$year'";
-    $countQuery .= " AND i.year = '$year'";
+    $itemQuery .= " AND i.year = ?";
+    $countQuery .= " AND i.year = ?";
+    $searchParams[] .= "$year";
+    $searchTypes .= "s";
 }
 
 if ($sale == 1) {
@@ -131,16 +140,32 @@ if ($sale == 1) {
 }
 
 if ($region !== 'all') {
-    $itemQuery .= " AND r.regionID = '$region'";
-    $countQuery .= " AND r.regionID = '$region'";
+    $itemQuery .= " AND r.regionID = ?";
+    $countQuery .= " AND r.regionID = ?";
+    $searchParams[] .= "$region";
+    $searchTypes .= "s";
 }
 
 $itemQuery .= ") AS furnitureAvailableInRegion;";
 
-$items = $conn->query($itemQuery);
-$count = $conn->query($countQuery);
-$countRes = $count->fetch_assoc();
-$itemCount = $countRes['items'];
+$stmt = $conn->prepare($itemQuery);
+if (count($searchParams) > 0) {
+    $stmt->bind_param($searchTypes, ...$searchParams);
+}
+$stmt->execute();
+$items = $stmt->get_result();
+$stmt->close();
+
+$stmt = $conn->prepare($countQuery);
+if (count($searchParams) > 0) {
+    $stmt->bind_param($searchTypes, ...$searchParams);
+}
+$stmt->execute();
+$count = $stmt->get_result();
+$stmt->close();
+
+$countRow = $count->fetch_assoc();
+$itemCount = $countRow['items'];
 
 if (!isset($_SESSION['id'])) {
     echo "<div id=reminder>Log in to start purchasing items!</div>";
@@ -154,19 +179,19 @@ if (!isset($_SESSION['id'])) {
 </div>
 <div id="filter-form">
     <select name="type" id="type">
-        <option value="none">Category</option>
+        <option value='none'>Category</option>
         <?php while ($row = $get_type->fetch_assoc()) { echo "<option value='{$row['type']}'>{$row['type']}</option>"; } ?>
     </select>
     <select name="material" id="material">
-        <option value="none">Material</option>
+        <option value='none'>Material</option>
         <?php while ($row = $get_material->fetch_assoc()) { echo "<option value='{$row['material']}'>{$row['material']}</option>"; } ?>
     </select>
     <select name="brand" id="brand">
-        <option value="none">Brand</option>
+        <option value='none'>Brand</option>
         <?php while ($row = $get_brand->fetch_assoc()) { echo "<option value='{$row['brand']}'>{$row['brand']}</option>"; } ?>
     </select>
     <select name="year" id="year">
-        <option value="none">Year of make</option>
+        <option value='none'>Year of make</option>
         <?php while ($row = $get_year->fetch_assoc()) { echo "<option value='{$row['year']}'>{$row['year']}</option>"; } ?>
     </select>
 
@@ -180,7 +205,9 @@ if (!isset($_SESSION['id'])) {
         ?>
     </select>
     
-    <label><input type="checkbox" value="sale" id="sale" name="sale">On Sale</label>
+    <label>
+        <input type="checkbox" value="sale" id="sale" name="sale" <?php if ($sale == 1) {echo "checked";}?> >On Sale
+    </label>
 
     <input type="submit" value="Apply filters" class="apply" name="apply_filter" id="button">
 </form>
@@ -208,8 +235,8 @@ if (!isset($_SESSION['id'])) {
             if (isset($_SESSION['id'])) {
                 $quantity = 0;
                 $res = $conn->query("SELECT quantity FROM cart WHERE itemID = {$row['itemID']} and userID = {$_SESSION['id']}");
-                $quantityRes = $res->fetch_assoc();
-                if (isset($quantityRes)) { $quantity = $quantityRes['quantity']; }
+                $quantityRow = $res->fetch_assoc();
+                if (isset($quantityRow)) { $quantity = $quantityRow['quantity']; }
                 if ($quantity > 0) { $cartText = "$quantity in cart.";}
                 else { $cartText = "Add to Cart";}
                 echo <<<EOT
