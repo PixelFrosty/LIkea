@@ -26,8 +26,13 @@ if (isset($_POST['signup_request'])) {
     $confpassword = $conn->real_escape_string($_POST['confpassword']);
     $regionID = $conn->real_escape_string($_POST['region']);
 
-    $get_email = "SELECT email FROM user WHERE email='$email'";
-    $result = $conn->query($get_email);
+    $get_email = "SELECT email FROM user WHERE email = ?";
+    $stmt = $conn->prepare($get_email);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $stmt->close();
     $row = $result->fetch_assoc();
 
     if ($confpassword !== $conn->real_escape_string($_POST['password'])) {
@@ -37,9 +42,13 @@ if (isset($_POST['signup_request'])) {
         // set local variable if invalid signin attempt
         $error = 'Email already in use.';
     } else {
-        $user_info = "INSERT INTO user (name, email, password, regionID) VALUES ('$name','$email', '$password', '$regionID')";
+        $user_info = "INSERT INTO user (name, email, password, regionID) VALUES (?, ?, ?, ?)";
 
-        $result = $conn->query($user_info);
+        $stmt = $conn->prepare($user_info);
+        $stmt->bind_param("ssss", $name, $email, $password, $regionID);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
 
         header("Location: signedup.php");
         exit;
@@ -56,7 +65,7 @@ if (isset($_POST['signup_request'])) {
         <form method="POST" action="">
             <input type="text" id="name" name="name" placeholder="Name" required value="<?php echo htmlspecialchars($name); ?>">
             <br>
-            <input type="text" id="email" name="email" placeholder="Email" required value="<?php echo htmlspecialchars($email); ?>">
+            <input type="email" id="email" name="email" placeholder="Email" required value="<?php echo htmlspecialchars($email); ?>">
             <br>
             <input type="password" id="password" name="password" placeholder="Password" required>
             <br>

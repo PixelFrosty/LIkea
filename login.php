@@ -23,8 +23,13 @@ if (isset($_POST['login_request'])) {
     $email = $conn->real_escape_string($_POST['email']);
     $password = $conn->real_escape_string($_POST['password']);
 
-    $get_user = "SELECT name, email, password, userID, regionID FROM user WHERE email='$email'";
-    $result = $conn->query($get_user);
+    $get_user = "SELECT name, email, password, userID, regionID FROM user WHERE email = ?";
+    $stmt = $conn->prepare($get_user);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $stmt->close();
     $row = $result->fetch_assoc();
 
     if (isset($row['email']) && $email === $row['email'] && password_verify($password, $row['password'])){
@@ -50,7 +55,7 @@ if (isset($_POST['login_request'])) {
         <h4 id="notice">Login</h4>
 
         <form method="POST" action="">
-            <input type="text" id="email" name="email" placeholder="Email" required value="<?php echo htmlspecialchars($email); ?>">
+            <input type="email" id="email" name="email" placeholder="Email" required value="<?php echo htmlspecialchars($email); ?>">
             <br>
             <input type="password" id="password" name="password" placeholder="Password" required>
             <br>
