@@ -29,6 +29,7 @@
     <div id="main">
         <a href="furniture.php">Browse Furniture</a>
         <a href="about.php">Branch Info</a>
+        <a href="team.php">Our Team</a>
     </div>
     <div id="user">
         <div id="name">

@@ -1,16 +1,12 @@
 <?php
 session_start();
-sleep(0.5);
 $cssfile = "browser.css";
 include 'header.php';
 
-$loggedIn = False;
 $selectedRegionID = null;
 
 if (isset($_SESSION['id'])) {
     $id = $_SESSION['id'];
-    $loggedIn = True;
-    $selectedRegionID = $_SESSION['regionID'];
 }
 
 $mysql_servername = 'localhost';
@@ -73,9 +69,6 @@ $year = '';
 $sale = 0;
 $region = 'all';
 
-if (isset($_SESSION['id'])) {
-    $region = $_SESSION['regionID'];
-}
 if (isset($_POST['search']) && $_POST['search'] != 'none') {
     $search = $_POST['search'];
 }
@@ -91,9 +84,11 @@ if (isset($_POST['brand']) && $_POST['brand'] != 'none') {
 if (isset($_POST['year']) && $_POST['year'] != 'none') {
     $year = $_POST['year'];
 }
+if (isset($_SESSION['id'])) {
+    $region = $_SESSION['regionID'];
+}
 if (isset($_POST['region']) && $_POST['region'] != 'none') {
     $region = $_POST['region'];
-    $selectedRegionID = $region;
 }
 if (isset($_POST['sale'])) {
     $sale = 1;
@@ -180,26 +175,38 @@ if (!isset($_SESSION['id'])) {
 <div id="filter-form">
     <select name="type" id="type">
         <option value='none'>Category</option>
-        <?php while ($row = $get_type->fetch_assoc()) { echo "<option value='{$row['type']}'>{$row['type']}</option>"; } ?>
+        <?php while ($row = $get_type->fetch_assoc()) {
+        echo "<option"; 
+        if (isset($type) && $row['type'] == $type) {echo " selected";}
+        echo " value='{$row['type']}'>{$row['type']}</option>"; } ?>
     </select>
     <select name="material" id="material">
         <option value='none'>Material</option>
-        <?php while ($row = $get_material->fetch_assoc()) { echo "<option value='{$row['material']}'>{$row['material']}</option>"; } ?>
+        <?php while ($row = $get_material->fetch_assoc()) {
+        echo "<option"; 
+        if (isset($material) && $row['material'] == $material) {echo " selected";}
+        echo " value='{$row['material']}'>{$row['material']}</option>"; } ?>
     </select>
     <select name="brand" id="brand">
         <option value='none'>Brand</option>
-        <?php while ($row = $get_brand->fetch_assoc()) { echo "<option value='{$row['brand']}'>{$row['brand']}</option>"; } ?>
+        <?php while ($row = $get_brand->fetch_assoc()) {
+        echo "<option"; 
+        if (isset($brand) && $row['brand'] == $brand) {echo " selected";}
+        echo " value='{$row['brand']}'>{$row['brand']}</option>"; } ?>
     </select>
     <select name="year" id="year">
         <option value='none'>Year of make</option>
-        <?php while ($row = $get_year->fetch_assoc()) { echo "<option value='{$row['year']}'>{$row['year']}</option>"; } ?>
+        <?php while ($row = $get_year->fetch_assoc()) {
+        echo "<option"; 
+        if (isset($year) && $row['year'] == $year) {echo " selected";}
+        echo " value='{$row['year']}'>{$row['year']}</option>"; } ?>
     </select>
 
     <select name="region" id="region">
         <option value="all" <?php echo ($region == 'all') ? 'selected' : ''; ?>>All Regions</option>
         <?php 
         while ($row = $get_regions->fetch_assoc()) {
-            $selected = ($row['regionID'] == $selectedRegionID) ? 'selected' : '';
+            $selected = (isset($region) && $row['regionID'] == $region) ? 'selected' : '';
             echo "<option value='{$row['regionID']}' {$selected}>{$row['location']}</option>";
         }
         ?>

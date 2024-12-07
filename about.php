@@ -21,9 +21,14 @@ $result = $conn->query($getRegions);
 $regions = [];
 while ($row = $result->fetch_assoc()) {
     $regions[] = $row;
+
 }
 
 $conn->close();
+
+if (isset($_POST['region'])) {
+    $selectedRegionID = $_POST['region'];
+}
 ?>
 
 <div id="container">
@@ -35,7 +40,7 @@ $conn->close();
                 <select id="region" name="region" required>
                     <option value="" disabled selected>Select Region</option>
                     <?php foreach ($regions as $region): ?>
-                        <option value="<?php echo htmlspecialchars($region['regionID']); ?>"><?php echo htmlspecialchars($region['location']); ?></option>
+                    <option value="<?php echo htmlspecialchars($region['regionID']); ?>" <?php if (isset($selectedRegionID) && $region['regionID'] == $selectedRegionID) {echo "selected";}?>><?php echo htmlspecialchars($region['location']); ?></option>
                     <?php endforeach; ?>
                 </select>
                 <br>
